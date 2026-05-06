@@ -299,6 +299,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .bsm.vi{background:#e0e7ff;color:#3730a3;border-color:#c7d2fe}
 .bsm.de{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
 .bsm.ad{background:#f3e8ff;color:#6b21a8;border-color:#e9d5ff}
+.bsm.ed{background:#fefce8;color:#854d0e;border-color:#fde68a}
 
 /* MODALS */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -599,6 +600,50 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
   </div>
 </div>
 
+<div class="overlay hidden" id="m-edit-user">
+  <div class="modal" style="max-width:420px;text-align:left">
+    <h2 style="margin-bottom:16px">✏️ แก้ไขข้อมูลผู้ใช้</h2>
+    <input type="hidden" id="edit-uid">
+    <div class="field"><label>ชื่อ</label><input type="text" id="edit-name"></div>
+    <div class="field"><label>อีเมล</label><input type="email" id="edit-email"></div>
+    <div class="field"><label>วันที่สมัคร</label><input type="date" id="edit-join"></div>
+    <div class="field"><label>สถานะสมาชิก</label>
+      <select id="edit-sub" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:14px;outline:none">
+        <option value="none">ไม่มี</option>
+        <option value="pending">รอตรวจสอบ</option>
+        <option value="active">Active</option>
+      </select>
+    </div>
+    <div class="field"><label>GPA</label><input type="text" id="edit-gpa" placeholder="เช่น 3.45"></div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn-pri" style="flex:1" onclick="saveEditUser()">บันทึก</button>
+      <button class="btn-can" onclick="closeModal('m-edit-user')">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="m-edit-slip">
+  <div class="modal" style="max-width:420px;text-align:left">
+    <h2 style="margin-bottom:16px">✏️ แก้ไขข้อมูลสลิป</h2>
+    <input type="hidden" id="edit-slip-id">
+    <div class="field"><label>อีเมลผู้ส่ง</label><input type="email" id="edit-slip-email"></div>
+    <div class="field"><label>วันที่ส่ง</label><input type="date" id="edit-slip-date"></div>
+    <div class="field"><label>จำนวนเงิน (฿)</label><input type="number" id="edit-slip-amount" min="1"></div>
+    <div class="field"><label>หมายเหตุ</label><input type="text" id="edit-slip-note"></div>
+    <div class="field"><label>สถานะ</label>
+      <select id="edit-slip-status" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:14px;outline:none">
+        <option value="pending">รอตรวจสอบ</option>
+        <option value="approved">อนุมัติแล้ว</option>
+        <option value="rejected">ปฏิเสธ</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn-pri" style="flex:1" onclick="saveEditSlip()">บันทึก</button>
+      <button class="btn-can" onclick="closeModal('m-edit-slip')">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════
 // STATE
@@ -893,18 +938,21 @@ function renderAdmin(){
     <td>${u.email}</td><td>${u.name}</td><td>${u.join}</td>
     <td><span class="br ${u.sub}">${u.sub==='active'?'Active':u.sub==='pending'?'รอตรวจสอบ':'ไม่มี'}</span></td>
     <td>${u.gpa}</td>
-    <td style="display:flex;gap:5px">
+    <td style="display:flex;gap:5px;flex-wrap:wrap">
       <button class="bsm vi" onclick="viewUser(${u.id})">ดูข้อมูล</button>
+      ${isSA?`<button class="bsm ed" onclick="editUser(${u.id})">แก้ไข</button>`:''}
       ${isSA?`<button class="bsm de" onclick="deleteUser(${u.id})">ลบ</button>`:''}
     </td>
   </tr>`).join('');
   document.getElementById('slips-body').innerHTML=SLIPS.map(s=>`<tr>
     <td>${s.email}</td><td>${s.date}</td><td>${s.amount}฿</td><td>${s.note}</td>
     <td><span class="br ${s.status==='approved'?'active':s.status}">${s.status==='approved'?'อนุมัติแล้ว':s.status==='pending'?'รอตรวจสอบ':'ปฏิเสธ'}</span></td>
-    <td style="display:flex;gap:5px">${s.status==='pending'
+    <td style="display:flex;gap:5px;flex-wrap:wrap">${s.status==='pending'
       ?`<button class="bsm ok" onclick="approveSlip(${s.id})">อนุมัติ</button>
         <button class="bsm no" onclick="rejectSlip(${s.id})">ปฏิเสธ</button>`
-      :`<span style="color:#94a3b8;font-size:12px">—</span>`}
+      :''}
+      ${isSA?`<button class="bsm ed" onclick="editSlip(${s.id})">แก้ไข</button>
+        <button class="bsm de" onclick="deleteSlip(${s.id})">ลบ</button>`:''}
     </td>
   </tr>`).join('');
   if(isSA) document.getElementById('admins-body').innerHTML=ADMINS.map(a=>`<tr>
@@ -939,10 +987,55 @@ function viewUser(id){
 function deleteUser(id){ if(!confirm('ยืนยันลบผู้ใช้?')) return; USERS=USERS.filter(u=>u.id!==id); renderAdmin(); }
 function approveSlip(id){ const s=SLIPS.find(x=>x.id===id); if(!s) return; s.status='approved'; const u=USERS.find(x=>x.email===s.email); if(u) u.sub='active'; renderAdmin(); }
 function rejectSlip(id){ const s=SLIPS.find(x=>x.id===id); if(s){ s.status='rejected'; renderAdmin(); } }
+function deleteSlip(id){ if(!confirm('ยืนยันลบสลิปนี้?')) return; SLIPS=SLIPS.filter(s=>s.id!==id); renderAdmin(); }
 function removeAdmin(email){ if(email==='kraten25ten@gmail.com'){ alert('ไม่สามารถลบ Superadmin ได้'); return; } if(!confirm('ยืนยันลบ Admin?')) return; ADMINS=ADMINS.filter(a=>a.email!==email); renderAdmin(); }
 function addAdminPrompt(){ const e=prompt('อีเมล Admin ใหม่:'); if(!e) return; const n=prompt('ชื่อ:')||e; if(ADMINS.find(a=>a.email===e)){ alert('มีอยู่แล้ว'); return; } ADMINS.push({email:e,name:n,role:'admin'}); CREDS[e]='admin123'; alert('เพิ่มแล้ว — รหัสเริ่มต้น: admin123'); renderAdmin(); }
 function activateSub(id){ const u=USERS.find(x=>x.id===id); if(u) u.sub='active'; }
 function revokeSub(id){ const u=USERS.find(x=>x.id===id); if(u) u.sub='none'; }
+
+function editUser(id){
+  const u=USERS.find(x=>x.id===id); if(!u) return;
+  document.getElementById('edit-uid').value=id;
+  document.getElementById('edit-name').value=u.name;
+  document.getElementById('edit-email').value=u.email;
+  document.getElementById('edit-join').value=u.join;
+  document.getElementById('edit-sub').value=u.sub;
+  document.getElementById('edit-gpa').value=u.gpa==='—'?'':u.gpa;
+  openModal('m-edit-user');
+}
+function saveEditUser(){
+  const id=parseInt(document.getElementById('edit-uid').value);
+  const u=USERS.find(x=>x.id===id); if(!u) return;
+  u.name=document.getElementById('edit-name').value.trim()||u.name;
+  u.email=document.getElementById('edit-email').value.trim()||u.email;
+  u.join=document.getElementById('edit-join').value||u.join;
+  u.sub=document.getElementById('edit-sub').value;
+  const gpa=document.getElementById('edit-gpa').value.trim();
+  u.gpa=gpa||'—';
+  closeModal('m-edit-user'); renderAdmin();
+}
+
+function editSlip(id){
+  const s=SLIPS.find(x=>x.id===id); if(!s) return;
+  document.getElementById('edit-slip-id').value=id;
+  document.getElementById('edit-slip-email').value=s.email;
+  document.getElementById('edit-slip-date').value=s.date;
+  document.getElementById('edit-slip-amount').value=s.amount;
+  document.getElementById('edit-slip-note').value=s.note;
+  document.getElementById('edit-slip-status').value=s.status;
+  openModal('m-edit-slip');
+}
+function saveEditSlip(){
+  const id=parseInt(document.getElementById('edit-slip-id').value);
+  const s=SLIPS.find(x=>x.id===id); if(!s) return;
+  s.email=document.getElementById('edit-slip-email').value.trim()||s.email;
+  s.date=document.getElementById('edit-slip-date').value||s.date;
+  s.amount=parseFloat(document.getElementById('edit-slip-amount').value)||s.amount;
+  s.note=document.getElementById('edit-slip-note').value.trim();
+  s.status=document.getElementById('edit-slip-status').value;
+  if(s.status==='approved'){ const u=USERS.find(x=>x.email===s.email); if(u) u.sub='active'; }
+  closeModal('m-edit-slip'); renderAdmin();
+}
 
 // ══════════════════════════
 // MODALS
