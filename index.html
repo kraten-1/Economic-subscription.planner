@@ -614,6 +614,19 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
   </div>
 </div>
 
+<div class="overlay hidden" id="m-add-admin">
+  <div class="modal">
+    <div class="m-icon">🔑</div>
+    <h2>เพิ่ม Admin</h2>
+    <p>กรอกข้อมูลของ Admin ที่ต้องการเพิ่ม</p>
+    <div class="field"><label>อีเมล</label><input type="email" id="new-admin-email" placeholder="example@email.com"></div>
+    <div class="field"><label>ชื่อ</label><input type="text" id="new-admin-name" placeholder="ชื่อผู้ดูแล"></div>
+    <div class="field"><label>รหัสผ่าน</label><input type="text" id="new-admin-pw" placeholder="ตั้งรหัสผ่าน" value="admin123"></div>
+    <button class="btn-pri" onclick="confirmAddAdmin()">✅ เพิ่ม Admin</button>
+    <button class="btn-can" onclick="closeModal('m-add-admin')">ยกเลิก</button>
+  </div>
+</div>
+
 <div class="save-toast" id="save-toast">✅ บันทึกสำเร็จแล้ว!</div>
 
 <!-- Expiry warning banner (fixed top) -->
@@ -812,10 +825,20 @@ let SLIPS=[
   {id:4,email:'mink.jtw@cmu.ac.th',  date:'2026-03-01',amount:19,note:'PromptPay',      status:'approved'},
   {id:5,email:'fern.nm@cmu.ac.th',   date:'2026-03-15',amount:19,note:'โอนจาก KBank',  status:'approved'},
 ];
-let ADMINS=[
-  {email:'kraten25ten@gmail.com', name:'Kraten (Owner)',  role:'superadmin'},
-];
+const SUPERADMIN={email:'kraten25ten@gmail.com', name:'Kraten (Owner)', role:'superadmin'};
+let ADMINS=[SUPERADMIN];
 const CREDS={'kraten25ten@gmail.com':'admin123'};
+// load extra admins from localStorage
+(function(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('hub_admins')||'[]');
+    saved.forEach(a=>{ if(a.email!==SUPERADMIN.email){ ADMINS.push(a); CREDS[a.email]=a.pw||'admin123'; } });
+  }catch(e){}
+})();
+function saveAdmins(){
+  const extras=ADMINS.filter(a=>a.email!==SUPERADMIN.email).map(a=>({...a,pw:CREDS[a.email]||'admin123'}));
+  localStorage.setItem('hub_admins',JSON.stringify(extras));
+}
 
 // ══════════════════════════
 // NAV
@@ -1130,8 +1153,29 @@ function approveSlip(id){
 }
 function rejectSlip(id){ const s=SLIPS.find(x=>x.id===id); if(s){ s.status='rejected'; renderAdmin(); } }
 function deleteSlip(id){ if(!confirm('ยืนยันลบสลิปนี้?')) return; SLIPS=SLIPS.filter(s=>s.id!==id); renderAdmin(); }
-function removeAdmin(email){ if(email==='kraten25ten@gmail.com'){ alert('ไม่สามารถลบ Superadmin ได้'); return; } if(!confirm('ยืนยันลบ Admin?')) return; ADMINS=ADMINS.filter(a=>a.email!==email); renderAdmin(); }
-function addAdminPrompt(){ const e=prompt('อีเมล Admin ใหม่:'); if(!e) return; const n=prompt('ชื่อ:')||e; if(ADMINS.find(a=>a.email===e)){ alert('มีอยู่แล้ว'); return; } ADMINS.push({email:e,name:n,role:'admin'}); CREDS[e]='admin123'; alert('เพิ่มแล้ว — รหัสเริ่มต้น: admin123'); renderAdmin(); }
+function removeAdmin(email){
+  if(email==='kraten25ten@gmail.com'){ alert('ไม่สามารถลบ Superadmin ได้'); return; }
+  if(!confirm('ยืนยันลบ Admin นี้?')) return;
+  ADMINS=ADMINS.filter(a=>a.email!==email);
+  delete CREDS[email];
+  saveAdmins(); renderAdmin();
+}
+function addAdminPrompt(){ openModal('m-add-admin'); }
+function confirmAddAdmin(){
+  const e=document.getElementById('new-admin-email').value.trim();
+  const n=document.getElementById('new-admin-name').value.trim()||e;
+  const pw=document.getElementById('new-admin-pw').value.trim()||'admin123';
+  if(!e){ alert('กรุณากรอกอีเมล'); return; }
+  if(ADMINS.find(a=>a.email===e)){ alert('อีเมลนี้มีอยู่แล้ว'); return; }
+  ADMINS.push({email:e,name:n,role:'admin'});
+  CREDS[e]=pw;
+  saveAdmins();
+  closeModal('m-add-admin');
+  document.getElementById('new-admin-email').value='';
+  document.getElementById('new-admin-name').value='';
+  document.getElementById('new-admin-pw').value='admin123';
+  renderAdmin();
+}
 function activateSub(id){ const u=USERS.find(x=>x.id===id); if(u) u.sub='active'; }
 function revokeSub(id){ const u=USERS.find(x=>x.id===id); if(u) u.sub='none'; }
 
