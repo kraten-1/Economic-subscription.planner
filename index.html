@@ -315,6 +315,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
     <div class="hero-brand">🎓 CMU StudyHub</div>
     <div class="hero-nav-right">
       <div id="user-area"></div>
+      <button class="h-btn" style="font-size:12px" onclick="goAdmin()">⚙ Admin</button>
     </div>
   </nav>
 
@@ -997,8 +998,9 @@ function submitSlip(){
 // ADMIN
 // ══════════════════════════
 function goAdmin(){
-  if(S.adminUser) showScreen('s-admin');
-  else showScreen('s-admin-login');
+  if(S.adminUser){ showScreen('s-admin'); return; }
+  if(S.user && isAdmin()){ S.adminUser=S.user; showScreen('s-admin'); return; }
+  showScreen('s-admin-login');
 }
 function adminLogin(){
   const email=document.getElementById('al-email').value.trim();
