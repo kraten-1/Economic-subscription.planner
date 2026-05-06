@@ -156,49 +156,57 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .gl.c{background:#fef3c7;color:#92400e}.gl.dp{background:#ffedd5;color:#9a3412}
 .gl.d{background:#fde8d8;color:#9a3412}.gl.f{background:#fee2e2;color:#991b1b}
 
-/* grade table */
-.grade-table-wrap{overflow-x:auto;background:#fff;border-radius:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(124,58,237,.08);border:1.5px solid #f3e8ff}
-.gtable{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
-.gtable thead th{background:#f3e8ff;color:#553c9a;padding:10px 8px;text-align:center;font-weight:700;border-bottom:2px solid #c4b5fd;white-space:nowrap;font-family:'Sarabun',sans-serif}
-.gtable thead th.th-left{text-align:left;padding-left:12px}
-.th-max{display:block;font-size:10px;font-weight:500;color:#a78bfa;margin-top:2px}
-.gtable tbody td{padding:8px 6px;border-bottom:1px solid #f3e8ff;vertical-align:middle;text-align:center}
-.gtr:hover td{background:#fdf8ff}
-.gtr.ca{border-left:4px solid #48bb78}.gtr.cbp,.gtr.cb{border-left:4px solid #4299e1}
-.gtr.ccp,.gtr.cc{border-left:4px solid #ecc94b}.gtr.cdp,.gtr.cd{border-left:4px solid #ed8936}
-.gtr.cf{border-left:4px solid #fc8181}
-.td-num{color:#a78bfa;font-weight:700;width:28px;padding-left:12px!important}
-.cinp-code{width:72px;padding:5px 6px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#553c9a;font-weight:600}
-.cinp-name{width:150px;padding:5px 6px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px}
-.cinp-cr{width:34px;padding:5px 4px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center}
-.cinp-code:focus,.cinp-name:focus,.cinp-cr:focus{outline:none;border-color:#a855f7;background:#faf5ff}
-.sinp-t{width:46px;padding:5px 3px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;display:block;margin:0 auto 2px}
-.sinp-t:focus{outline:none;border-color:#a855f7;background:#faf5ff}
-.max-hint{font-size:10px;color:#c4b5fd;display:block;text-align:center}
-.finp-t{width:40px;padding:5px 3px;border:1.5px solid #fca5a5;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#dc2626}
-.finp-t:focus{outline:none;border-color:#ef4444}
-.td-score{min-width:60px}
-.td-total{font-weight:700;font-size:14px;color:#553c9a}
-.grade-badge{font-size:13px;font-weight:700;padding:3px 10px;border-radius:7px;min-width:36px;text-align:center;display:inline-block}
+/* grade table — relaxed card-row style */
+.grade-table-wrap{overflow-x:auto;padding:0 4px 4px;margin-bottom:16px}
+.gtable{width:100%;border-collapse:separate;border-spacing:0 10px;font-size:13px;min-width:760px}
+/* header */
+.gtable thead th{background:transparent;color:#a78bfa;padding:2px 8px 6px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;font-family:'Sarabun',sans-serif;border:none}
+.gtable thead th.th-left{text-align:left;padding-left:16px}
+.th-max{display:inline;font-weight:400;opacity:.75;margin-left:2px;text-transform:none;letter-spacing:0}
+/* rows as floating cards */
+.gtr td{background:#fff;padding:12px 8px;vertical-align:middle;text-align:center;box-shadow:0 2px 10px rgba(124,58,237,.07);border-top:1px solid #f3e8ff;border-bottom:1px solid #f3e8ff;transition:box-shadow .2s,background .2s}
+.gtr td:first-child{border-left:1px solid #f3e8ff;border-radius:14px 0 0 14px;padding-left:14px}
+.gtr td:last-child{border-right:1px solid #f3e8ff;border-radius:0 14px 14px 0;padding-right:10px}
+.gtr:hover td{background:#faf5ff;box-shadow:0 4px 18px rgba(124,58,237,.13)}
+/* grade accent stripe */
+.gtr.ca td:first-child{border-left:4px solid #68d391!important}
+.gtr.cbp td:first-child,.gtr.cb td:first-child{border-left:4px solid #63b3ed!important}
+.gtr.ccp td:first-child,.gtr.cc td:first-child{border-left:4px solid #f6e05e!important}
+.gtr.cdp td:first-child,.gtr.cd td:first-child{border-left:4px solid #f6ad55!important}
+.gtr.cf td:first-child{border-left:4px solid #fc8181!important}
+/* cells */
+.td-num{color:#c4b5fd;font-weight:700;font-size:12px;width:26px}
+.cinp-code{width:74px;padding:6px 7px;border:none;border-radius:10px;background:#f3e8ff;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#553c9a;font-weight:700}
+.cinp-name{width:155px;padding:6px 7px;border:none;border-radius:10px;background:#faf5ff;font-family:'Sarabun',sans-serif;font-size:12px;color:#374151}
+.cinp-cr{width:36px;padding:6px 4px;border:none;border-radius:10px;background:#faf5ff;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center}
+.cinp-code:focus,.cinp-name:focus,.cinp-cr:focus{outline:2px solid #c4b5fd;background:#fff}
+.sinp-t{width:48px;padding:6px 4px;border:none;border-radius:10px;background:#f9fafb;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;display:block;margin:0 auto 3px;color:#374151}
+.sinp-t:focus{outline:2px solid #c4b5fd;background:#fff}
+.max-hint{font-size:10px;color:#d8b4fe;display:block;text-align:center}
+.finp-t{width:42px;padding:6px 4px;border:none;border-radius:10px;background:#fff5f5;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#f87171;font-weight:600}
+.finp-t:focus{outline:2px solid #fca5a5;background:#fff}
+.td-score{min-width:62px}
+.td-total{font-weight:800;font-size:15px;color:#553c9a}
+.grade-badge{font-size:13px;font-weight:700;padding:5px 12px;border-radius:20px;min-width:40px;text-align:center;display:inline-block}
 .grade-badge.ca{background:#c6f6d5;color:#22543d}.grade-badge.cbp{background:#bee3f8;color:#1e3a5f}
 .grade-badge.cb{background:#dbeafe;color:#1e40af}.grade-badge.ccp{background:#fef9c3;color:#713f12}
 .grade-badge.cc{background:#fef3c7;color:#78350f}.grade-badge.cdp{background:#ffedd5;color:#7c2d12}
 .grade-badge.cd{background:#fde8d8;color:#7c2d12}.grade-badge.cf{background:#fee2e2;color:#7f1d1d}
 .grade-badge.cx{background:#f3e8ff;color:#a78bfa}
-.btn-del{background:none;border:none;color:#fc8181;cursor:pointer;font-size:18px;padding:0 4px;line-height:1}
-.btn-del:hover{color:#e53e3e}
-.btn-add-course{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#fff;border:2px dashed #d6bcfa;border-radius:12px;color:#553c9a;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all .15s}
-.btn-add-course:hover{background:#faf5ff;border-color:#b794f4}
-.summary-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(124,58,237,.08);margin-bottom:14px;border:1.5px solid #f3e8ff}
+.btn-del{background:none;border:none;color:#e9d5ff;cursor:pointer;font-size:18px;padding:0 4px;line-height:1;transition:color .15s}
+.btn-del:hover{color:#f87171}
+.btn-add-course{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#fff;border:2px dashed #e9d5ff;border-radius:16px;color:#a78bfa;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all .15s}
+.btn-add-course:hover{background:#faf5ff;border-color:#c4b5fd;color:#7c3aed}
+.summary-card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 2px 16px rgba(124,58,237,.08);margin-bottom:14px;border:1.5px solid #f3e8ff}
 .summary-card h2{font-size:16px;font-weight:700;color:#553c9a;margin-bottom:14px}
 .sum-tbl{width:100%;border-collapse:collapse}
-.sum-tbl th{font-size:11.5px;color:#a78bfa;font-weight:700;padding:7px 12px;background:#f3e8ff;border-bottom:2px solid #c4b5fd;text-align:left}
-.sum-tbl td{padding:8px 12px;border-bottom:1px solid #f3e8ff;font-size:13px}
+.sum-tbl th{font-size:11.5px;color:#a78bfa;font-weight:700;padding:7px 12px;background:#f3e8ff;border-bottom:2px solid #e9d5ff;text-align:left;border-radius:4px}
+.sum-tbl td{padding:10px 12px;border-bottom:1px solid #f9f0ff;font-size:13px}
 .sum-tbl tr:last-child td{border-bottom:none}
-.gpa-box{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:16px 22px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.gpa-box{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;padding:18px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-top:14px}
 .gpa-left .gpa-lbl{font-size:13.5px;font-weight:600;opacity:.9}
 .gpa-left .gpa-cr{font-size:12px;opacity:.75;margin-top:2px}
-.gpa-val{font-size:34px;font-weight:700}
+.gpa-val{font-size:36px;font-weight:800}
 
 /* ══════════════════════════════
    ADMIN LOGIN
