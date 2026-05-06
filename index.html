@@ -833,6 +833,7 @@ function refreshGate(){
     content.style.display='flex';
     if(courses.length===0){ loadCoursesFromPlanner(); if(courses.length===0){ courses=[newCourse()]; } }
     renderLegend(); renderAll();
+    const gs=document.querySelector('.grade-scroll'); if(gs) gs.scrollTop=0;
   } else {
     gate.classList.remove('hidden');
     content.style.display='none';
