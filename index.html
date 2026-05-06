@@ -449,7 +449,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
         <div class="tbl-wrap">
           <div class="tbl-head-bar"><span>👥 รายชื่อผู้ใช้</span><span style="font-size:12px;color:#94a3b8" id="user-cnt"></span></div>
           <table class="atbl"><thead><tr>
-            <th>อีเมล</th><th>ชื่อ</th><th>วันที่สมัคร</th><th>สมาชิก</th><th>GPA ล่าสุด</th><th>การจัดการ</th>
+            <th>อีเมล</th><th>ชื่อ</th><th>วันที่สมัคร</th><th>สมาชิก</th><th>หมดอายุ</th><th>GPA ล่าสุด</th><th>การจัดการ</th>
           </tr></thead><tbody id="users-body"></tbody></table>
         </div>
       </div>
@@ -588,6 +588,13 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
   </div>
 </div>
 
+<!-- Expiry warning banner (fixed top) -->
+<div id="expiry-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#e53e3e,#c53030);color:#fff;padding:10px 20px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.2)">
+  <span id="expiry-msg"></span>
+  <button onclick="gotoFeature('grades')" style="margin-left:14px;background:rgba(255,255,255,.25);border:1.5px solid rgba(255,255,255,.6);border-radius:12px;padding:3px 12px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer">ต่ออายุตอนนี้</button>
+  <button onclick="document.getElementById('expiry-banner').style.display='none'" style="margin-left:8px;background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;vertical-align:middle">×</button>
+</div>
+
 <script>
 // ══════════════════════════
 // STATE
@@ -595,6 +602,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 const S={
   user: JSON.parse(localStorage.getItem('hub_user')||'null'),
   subStatus: localStorage.getItem('hub_sub')||'none',
+  subExpiry: localStorage.getItem('hub_sub_expiry')||null,
   pendingFeature: null,
   adminUser: null,
 };
@@ -743,7 +751,7 @@ function updateField(id,field,val){
   else c[field]=val;
   const el=document.getElementById('card-'+id);
   if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
-  renderSummary();
+  renderSummary(); autoSaveScores();
 }
 
 function updateScore(id,key,field,val){
@@ -751,16 +759,16 @@ function updateScore(id,key,field,val){
   c.scores[key][field]=val;
   const el=document.getElementById('card-'+id);
   if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
-  renderSummary();
+  renderSummary(); autoSaveScores();
 }
 
 function addCourse(){
-  courses.push(newCourse()); renderAll();
+  courses.push(newCourse()); renderAll(); autoSaveScores();
 }
 
 function removeCourse(id){
   if(courses.length<=1) return;
-  courses=courses.filter(c=>c.id!==id); renderAll();
+  courses=courses.filter(c=>c.id!==id); renderAll(); autoSaveScores();
 }
 
 function onGlobalFChange(){
@@ -823,6 +831,76 @@ function loadCoursesFromPlanner(){
   }catch(e){}
 }
 
+// ══════════════════════════
+// SCORE SAVE / LOAD
+// ══════════════════════════
+let _saveTimer=null;
+function autoSaveScores(){
+  clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(()=>{
+    if(!S.user||!S.user.email) return;
+    localStorage.setItem('hub_grades_'+S.user.email, JSON.stringify(courses));
+  },800);
+}
+
+function loadSavedScores(){
+  if(!S.user||!S.user.email) return false;
+  const saved=localStorage.getItem('hub_grades_'+S.user.email);
+  if(!saved) return false;
+  try{
+    const parsed=JSON.parse(saved);
+    if(!parsed||!parsed.length) return false;
+    courses=parsed;
+    nextId=Math.max(...courses.map(c=>c.id))+1;
+    return true;
+  }catch(e){ return false; }
+}
+
+// ══════════════════════════
+// SUBSCRIPTION EXPIRY
+// ══════════════════════════
+function checkExpiry(){
+  if(!S.user || isAdmin()) return;
+  if(!S.subExpiry) return;
+  const expiry=new Date(S.subExpiry);
+  expiry.setHours(23,59,59,999);
+  const now=new Date();
+  const msLeft=expiry-now;
+  const hoursLeft=msLeft/(1000*60*60);
+
+  if(hoursLeft<-24){
+    // grace period passed — revoke
+    S.subStatus='none'; S.subExpiry=null;
+    localStorage.setItem('hub_sub','none');
+    localStorage.removeItem('hub_sub_expiry');
+    return;
+  }
+  if(hoursLeft<=24){
+    const banner=document.getElementById('expiry-banner');
+    const msg=document.getElementById('expiry-msg');
+    if(!banner||!msg) return;
+    if(hoursLeft<=0){
+      msg.textContent='⚠️ กรุณาชำระค่าบริการ — ระบบคำนวณคะแนนของท่านกำลังจะหมดอายุในวันนี้ (เหลือเวลา '+(Math.max(0,Math.floor(hoursLeft+24)))+' ชม. ก่อนระบบปิด)';
+    } else {
+      msg.textContent='⏰ แพ็กเกจของท่านจะหมดอายุใน '+Math.ceil(hoursLeft)+' ชั่วโมง — กรุณาชำระเงินเพื่อใช้งานต่อเนื่อง';
+    }
+    banner.style.display='block';
+    document.body.style.paddingTop='42px';
+  }
+}
+
+function setSubExpiry(email, fromDate){
+  const expiry=new Date(fromDate||new Date());
+  expiry.setDate(expiry.getDate()+32);
+  const expiryStr=expiry.toISOString().split('T')[0];
+  if(S.user&&S.user.email===email){
+    S.subStatus='active'; S.subExpiry=expiryStr;
+    localStorage.setItem('hub_sub','active');
+    localStorage.setItem('hub_sub_expiry',expiryStr);
+  }
+  return expiryStr;
+}
+
 function refreshGate(){
   const gate=document.getElementById('grades-gate');
   const content=document.getElementById('grades-content');
@@ -831,7 +909,9 @@ function refreshGate(){
     gate.classList.add('hidden');
     content.classList.remove('hidden');
     content.style.display='flex';
-    if(courses.length===0){ loadCoursesFromPlanner(); if(courses.length===0){ courses=[newCourse()]; } }
+    if(courses.length===0){
+      if(!loadSavedScores()){ loadCoursesFromPlanner(); if(courses.length===0){ courses=[newCourse()]; } }
+    }
     renderLegend(); renderAll();
     const gs=document.querySelector('.grade-scroll'); if(gs) gs.scrollTop=0;
   } else {
@@ -846,10 +926,9 @@ function refreshGate(){
 // ══════════════════════════
 function onGoogleLogin(res){
   const payload=JSON.parse(atob(res.credential.split('.')[1]));
-  const adm=ADMINS.find(a=>a.email===payload.email);
   S.user={email:payload.email,name:payload.name||payload.email.split('@')[0],av:(payload.name||'U')[0].toUpperCase()};
   localStorage.setItem('hub_user',JSON.stringify(S.user));
-  renderTopUser();
+  renderTopUser(); checkExpiry();
   closeModal('m-login');
   if(S.pendingFeature){ const f=S.pendingFeature; S.pendingFeature=null; gotoFeature(f); }
 }
@@ -951,16 +1030,21 @@ function renderAdmin(){
   document.getElementById('st-rev').textContent=active*19;
   document.getElementById('user-cnt').textContent=`ทั้งหมด ${USERS.length} คน`;
   const isSA=S.adminUser?.role==='superadmin';
-  document.getElementById('users-body').innerHTML=USERS.map(u=>`<tr>
+  document.getElementById('users-body').innerHTML=USERS.map(u=>{
+    const exp=u.subExpiry?u.subExpiry:'—';
+    const daysLeft=u.subExpiry?Math.ceil((new Date(u.subExpiry)-new Date())/(1000*60*60*24)):null;
+    const expColor=daysLeft!==null&&daysLeft<=3?'color:#e53e3e;font-weight:700':'';
+    return `<tr>
     <td>${u.email}</td><td>${u.name}</td><td>${u.join}</td>
     <td><span class="br ${u.sub}">${u.sub==='active'?'Active':u.sub==='pending'?'รอตรวจสอบ':'ไม่มี'}</span></td>
+    <td style="${expColor}">${exp}${daysLeft!==null?' ('+daysLeft+'วัน)':''}</td>
     <td>${u.gpa}</td>
     <td style="display:flex;gap:5px;flex-wrap:wrap">
       <button class="bsm vi" onclick="viewUser(${u.id})">ดูข้อมูล</button>
       ${isSA?`<button class="bsm ed" onclick="editUser(${u.id})">แก้ไข</button>`:''}
       ${isSA?`<button class="bsm de" onclick="deleteUser(${u.id})">ลบ</button>`:''}
     </td>
-  </tr>`).join('');
+  </tr>`;}).join('');
   document.getElementById('slips-body').innerHTML=SLIPS.map(s=>`<tr>
     <td>${s.email}</td><td>${s.date}</td><td>${s.amount}฿</td><td>${s.note}</td>
     <td><span class="br ${s.status==='approved'?'active':s.status}">${s.status==='approved'?'อนุมัติแล้ว':s.status==='pending'?'รอตรวจสอบ':'ปฏิเสธ'}</span></td>
@@ -1002,7 +1086,18 @@ function viewUser(id){
   openModal('m-detail');
 }
 function deleteUser(id){ if(!confirm('ยืนยันลบผู้ใช้?')) return; USERS=USERS.filter(u=>u.id!==id); renderAdmin(); }
-function approveSlip(id){ const s=SLIPS.find(x=>x.id===id); if(!s) return; s.status='approved'; const u=USERS.find(x=>x.email===s.email); if(u) u.sub='active'; renderAdmin(); }
+function approveSlip(id){
+  const s=SLIPS.find(x=>x.id===id); if(!s) return;
+  s.status='approved';
+  const u=USERS.find(x=>x.email===s.email);
+  if(u){
+    u.sub='active';
+    const expiry=new Date(); expiry.setDate(expiry.getDate()+32);
+    u.subExpiry=expiry.toISOString().split('T')[0];
+    setSubExpiry(s.email, new Date());
+  }
+  renderAdmin();
+}
 function rejectSlip(id){ const s=SLIPS.find(x=>x.id===id); if(s){ s.status='rejected'; renderAdmin(); } }
 function deleteSlip(id){ if(!confirm('ยืนยันลบสลิปนี้?')) return; SLIPS=SLIPS.filter(s=>s.id!==id); renderAdmin(); }
 function removeAdmin(email){ if(email==='kraten25ten@gmail.com'){ alert('ไม่สามารถลบ Superadmin ได้'); return; } if(!confirm('ยืนยันลบ Admin?')) return; ADMINS=ADMINS.filter(a=>a.email!==email); renderAdmin(); }
@@ -1050,7 +1145,10 @@ function saveEditSlip(){
   s.amount=parseFloat(document.getElementById('edit-slip-amount').value)||s.amount;
   s.note=document.getElementById('edit-slip-note').value.trim();
   s.status=document.getElementById('edit-slip-status').value;
-  if(s.status==='approved'){ const u=USERS.find(x=>x.email===s.email); if(u) u.sub='active'; }
+  if(s.status==='approved'){
+    const u=USERS.find(x=>x.email===s.email);
+    if(u){ u.sub='active'; const expiry=new Date(); expiry.setDate(expiry.getDate()+32); u.subExpiry=expiry.toISOString().split('T')[0]; setSubExpiry(s.email,new Date()); }
+  }
   closeModal('m-edit-slip'); renderAdmin();
 }
 
@@ -1067,6 +1165,7 @@ document.querySelectorAll('.overlay').forEach(o=>{
 // INIT
 // ══════════════════════════
 renderTopUser();
+checkExpiry();
 </script>
 </body>
 </html>
