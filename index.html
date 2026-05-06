@@ -120,18 +120,19 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 /* ══════════════════════════════
    GRADE CALCULATOR (spreadsheet)
 ══════════════════════════════ */
-#s-grades{background:#fff}
+#s-grades{background:#fff0f5}
 .grade-page{display:flex;flex-direction:column;height:100vh}
 
 .grade-topbar{
-  height:48px;background:#1e1e2e;display:flex;align-items:center;padding:0 16px;
-  gap:12px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08);
+  height:48px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;padding:0 16px;
+  gap:12px;flex-shrink:0;
 }
-.grade-topbar .iframe-back{color:rgba(255,255,255,.7)}
-.grade-topbar .iframe-lbl{color:#fff;font-size:14px}
+.grade-topbar .iframe-back{color:rgba(255,255,255,.85);font-family:'Sarabun',sans-serif;font-size:13px;background:none;border:none;cursor:pointer}
+.grade-topbar .iframe-back:hover{color:#fff}
+.grade-topbar .iframe-lbl{color:#fff;font-size:14px;font-weight:700}
 
 .grade-toolbar{
-  background:#f8f9fa;border-bottom:1px solid #e2e8f0;padding:8px 16px;
+  background:rgba(255,255,255,.85);border-bottom:1px solid #d6bcfa;padding:8px 16px;
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex-shrink:0;
 }
 .gt-label{font-size:13px;font-weight:600;color:#4a5568}
@@ -158,7 +159,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .pending-note{background:#fffbeb;border:1.5px solid #f6e05e;border-radius:12px;padding:11px 18px;font-size:13px;color:#744210;margin-top:12px;max-width:380px}
 
 /* SPREADSHEET */
-.sheet-wrap{flex:1;overflow:auto;background:#fff}
+.sheet-wrap{flex:1;overflow:auto;background:rgba(255,255,255,.92);margin:12px;border-radius:12px;box-shadow:0 2px 12px rgba(102,126,234,.12)}
 .sheet-tbl{width:100%;border-collapse:collapse;min-width:900px}
 
 /* header row */
@@ -225,7 +226,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 
 /* sheet footer */
 .sheet-footer{
-  background:#f8f9fa;border-top:2px solid #d4e6cc;padding:12px 16px;
+  background:rgba(255,255,255,.85);border-top:2px solid #d6bcfa;padding:12px 16px;
   display:flex;align-items:center;gap:12px;flex-shrink:0;
 }
 .btn-add-row{
@@ -384,16 +385,6 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
   </div>
 </div>
 
-<!-- ═══════ PLANNER ═══════ -->
-<div class="screen" id="s-planner">
-  <div class="iframe-wrap">
-    <div class="iframe-bar v1">
-      <button class="iframe-back" onclick="goHero()">← กลับ</button>
-      <span class="iframe-lbl">📅 วางแผนการเรียน — CMU Econ</span>
-    </div>
-    <iframe src="econ-planner.html" title="Course Planner"></iframe>
-  </div>
-</div>
 
 <!-- ═══════ GRADES ═══════ -->
 <div class="screen" id="s-grades">
@@ -799,7 +790,7 @@ function goHero(){ showScreen('s-hero'); }
 
 function gotoFeature(f){
   if(f==='planner'){
-    window.open('https://kraten-1.github.io/studyplan-economic/','_blank');
+    window.location.href='./planner.html';
   } else if(f==='grades'){
     if(!S.user){ S.pendingFeature='grades'; openModal('m-login'); return; }
     showScreen('s-grades'); refreshGate();
@@ -807,6 +798,18 @@ function gotoFeature(f){
 }
 
 function isAdmin(){ return S.user && ADMINS.find(a=>a.email===S.user.email); }
+
+function loadCoursesFromPlanner(){
+  const saved=localStorage.getItem('hub_current_courses');
+  if(!saved) return;
+  try{
+    const list=JSON.parse(saved);
+    if(!list||!list.length) return;
+    rows=list.map((c,i)=>({id:i+1,code:c.code||'',name:c.name||'',cr:parseFloat(c.cr)||3,fcut:'',group:'',hw:'',mid:'',final:''}));
+    nextRowId=rows.length+1;
+    document.getElementById('sem-label').textContent='📌 วิชาที่กำลังเรียน (จากแผนการเรียน)';
+  }catch(e){}
+}
 
 function refreshGate(){
   const gate=document.getElementById('grades-gate');
@@ -816,6 +819,7 @@ function refreshGate(){
     gate.classList.add('hidden');
     content.classList.remove('hidden');
     content.style.display='flex';
+    loadCoursesFromPlanner();
     renderSheet();
   } else {
     gate.classList.remove('hidden');
