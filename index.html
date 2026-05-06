@@ -473,7 +473,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
       <div class="demo-hint">
         <strong>Demo accounts:</strong><br>
         superadmin: kraten25ten@gmail.com / admin123<br>
-        admin: admin@cmu.ac.th / cmu2026
+        admin: witchwasin@gmail.com / admin123
       </div>
     </div>
   </div>
@@ -740,10 +740,10 @@ let SLIPS=[
   {id:5,email:'fern.nm@cmu.ac.th',   date:'2026-03-15',amount:19,note:'โอนจาก KBank',  status:'approved'},
 ];
 let ADMINS=[
-  {email:'kraten25ten@gmail.com',name:'Kraten (Owner)',role:'superadmin'},
-  {email:'admin@cmu.ac.th',      name:'แอดมิน CMU',    role:'admin'},
+  {email:'kraten25ten@gmail.com', name:'Kraten (Owner)',  role:'superadmin'},
+  {email:'witchwasin@gmail.com',  name:'Witchwasin',      role:'admin'},
 ];
-const CREDS={'kraten25ten@gmail.com':'admin123','admin@cmu.ac.th':'cmu2026'};
+const CREDS={'kraten25ten@gmail.com':'admin123','witchwasin@gmail.com':'admin123'};
 
 // ══════════════════════════
 // NAV
@@ -771,6 +771,7 @@ function refreshGate(){
   const note=document.getElementById('pending-note');
   if(S.subStatus==='active' || isAdmin()){
     gate.classList.add('hidden');
+    content.classList.remove('hidden');
     content.style.display='flex';
     renderSheet();
   } else {
