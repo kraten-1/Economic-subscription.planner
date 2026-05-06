@@ -140,8 +140,8 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .pending-note{background:#fffbeb;border:1.5px solid #f6e05e;border-radius:12px;padding:11px 18px;font-size:13px;color:#744210;margin-top:12px;max-width:380px}
 
 /* grade scroll area */
-.grade-scroll{flex:1;overflow-y:auto;padding:16px}
-.grade-inner{max-width:860px;margin:0 auto}
+.grade-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px}
+.grade-inner{max-width:100%;margin:0 auto}
 
 /* global bar */
 .global-bar{background:#fff;border-radius:12px;padding:13px 18px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:center;flex-wrap:wrap;gap:16px}
@@ -157,8 +157,9 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .gl.d{background:#fde8d8;color:#9a3412}.gl.f{background:#fee2e2;color:#991b1b}
 
 /* grade table — relaxed card-row style */
-.grade-table-wrap{overflow-x:auto;padding:0 4px 4px;margin-bottom:16px}
-.gtable{width:100%;border-collapse:separate;border-spacing:0 10px;font-size:13px;min-width:760px}
+.grade-table-wrap{overflow-x:hidden;padding:0 4px 4px;margin-bottom:16px}
+.gtable{width:100%;border-collapse:separate;border-spacing:0 10px;font-size:13px}
+.cinp-name{width:100%!important}
 /* header */
 .gtable thead th{background:transparent;color:#a78bfa;padding:2px 8px 6px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;font-family:'Sarabun',sans-serif;border:none}
 .gtable thead th.th-left{text-align:left;padding-left:16px}
