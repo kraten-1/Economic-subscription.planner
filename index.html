@@ -804,7 +804,10 @@ const CREDS={'kraten25ten@gmail.com':'admin123'};
 // ══════════════════════════
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el=document.getElementById(id);
+  el.classList.add('active');
+  el.scrollTop=0;
+  window.scrollTo(0,0);
 }
 function goHero(){ showScreen('s-hero'); }
 
