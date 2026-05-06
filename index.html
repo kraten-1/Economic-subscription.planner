@@ -156,55 +156,44 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .gl.c{background:#fef3c7;color:#92400e}.gl.dp{background:#ffedd5;color:#9a3412}
 .gl.d{background:#fde8d8;color:#9a3412}.gl.f{background:#fee2e2;color:#991b1b}
 
-/* course card */
-.course-card{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 1px 6px rgba(0,0,0,.08);overflow:hidden;border-left:5px solid #e2e8f0;transition:border-color .25s}
-.course-card.ca{border-left-color:#38a169}.course-card.cbp,.course-card.cb{border-left-color:#3182ce}
-.course-card.ccp,.course-card.cc{border-left-color:#d69e2e}.course-card.cdp,.course-card.cd{border-left-color:#ed8936}
-.course-card.cf{border-left-color:#e53e3e}
-.card-top{display:flex;align-items:center;gap:9px;padding:11px 14px;background:#f7fafc;border-bottom:1px solid #e2e8f0;flex-wrap:wrap}
-.card-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.c-inp-code{width:88px;padding:6px 8px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700}
-.c-inp-name{flex:1;min-width:140px;padding:6px 8px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px}
-.c-inp-cr{width:52px;padding:6px 7px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center}
-.card-top input:focus{outline:none;border-color:#667eea}
-.grade-block{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.grade-badge{font-size:17px;font-weight:700;padding:4px 13px;border-radius:8px;min-width:50px;text-align:center}
+/* grade table */
+.grade-table-wrap{overflow-x:auto;background:#fff;border-radius:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(124,58,237,.08);border:1.5px solid #f3e8ff}
+.gtable{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
+.gtable thead th{background:#f3e8ff;color:#553c9a;padding:10px 8px;text-align:center;font-weight:700;border-bottom:2px solid #c4b5fd;white-space:nowrap;font-family:'Sarabun',sans-serif}
+.gtable thead th.th-left{text-align:left;padding-left:12px}
+.th-max{display:block;font-size:10px;font-weight:500;color:#a78bfa;margin-top:2px}
+.gtable tbody td{padding:8px 6px;border-bottom:1px solid #f3e8ff;vertical-align:middle;text-align:center}
+.gtr:hover td{background:#fdf8ff}
+.gtr.ca{border-left:4px solid #48bb78}.gtr.cbp,.gtr.cb{border-left:4px solid #4299e1}
+.gtr.ccp,.gtr.cc{border-left:4px solid #ecc94b}.gtr.cdp,.gtr.cd{border-left:4px solid #ed8936}
+.gtr.cf{border-left:4px solid #fc8181}
+.td-num{color:#a78bfa;font-weight:700;width:28px;padding-left:12px!important}
+.cinp-code{width:72px;padding:5px 6px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#553c9a;font-weight:600}
+.cinp-name{width:150px;padding:5px 6px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px}
+.cinp-cr{width:34px;padding:5px 4px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center}
+.cinp-code:focus,.cinp-name:focus,.cinp-cr:focus{outline:none;border-color:#a855f7;background:#faf5ff}
+.sinp-t{width:46px;padding:5px 3px;border:1.5px solid #e9d5ff;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;display:block;margin:0 auto 2px}
+.sinp-t:focus{outline:none;border-color:#a855f7;background:#faf5ff}
+.max-hint{font-size:10px;color:#c4b5fd;display:block;text-align:center}
+.finp-t{width:40px;padding:5px 3px;border:1.5px solid #fca5a5;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#dc2626}
+.finp-t:focus{outline:none;border-color:#ef4444}
+.td-score{min-width:60px}
+.td-total{font-weight:700;font-size:14px;color:#553c9a}
+.grade-badge{font-size:13px;font-weight:700;padding:3px 10px;border-radius:7px;min-width:36px;text-align:center;display:inline-block}
 .grade-badge.ca{background:#c6f6d5;color:#22543d}.grade-badge.cbp{background:#bee3f8;color:#1e3a5f}
 .grade-badge.cb{background:#dbeafe;color:#1e40af}.grade-badge.ccp{background:#fef9c3;color:#713f12}
 .grade-badge.cc{background:#fef3c7;color:#78350f}.grade-badge.cdp{background:#ffedd5;color:#7c2d12}
 .grade-badge.cd{background:#fde8d8;color:#7c2d12}.grade-badge.cf{background:#fee2e2;color:#7f1d1d}
-.grade-badge.cx{background:#edf2f7;color:#a0aec0}
-.score-total-txt{font-size:12.5px;color:#718096;font-weight:600}
-.btn-del{background:none;border:none;color:#fc8181;cursor:pointer;font-size:20px;padding:0 3px;line-height:1;flex-shrink:0}
+.grade-badge.cx{background:#f3e8ff;color:#a78bfa}
+.btn-del{background:none;border:none;color:#fc8181;cursor:pointer;font-size:18px;padding:0 4px;line-height:1}
 .btn-del:hover{color:#e53e3e}
-.score-wrap{padding:0}
-.stbl{width:100%;border-collapse:collapse}
-.stbl th{font-size:11px;color:#a0aec0;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:6px 14px;text-align:left;background:#fafafa;border-bottom:1px solid #f0f4f8}
-.stbl th.r,.stbl td.r{text-align:center}
-.stbl td{padding:7px 14px;border-bottom:1px solid #f7fafc;font-size:13px;vertical-align:middle}
-.stbl tr:last-child td{border-bottom:none}
-.stbl td.lbl{font-weight:600;color:#4a5568;white-space:nowrap}
-.sinp{width:62px;padding:4px 7px;border:1.5px solid #e2e8f0;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center}
-.minp{width:50px;padding:4px 6px;border:1.5px solid #e2e8f0;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#718096}
-.sinp:focus,.minp:focus{outline:none;border-color:#667eea}
-.pct-cell{font-size:11.5px;color:#a0aec0;min-width:44px}
-.f-row td{background:#fff5f5}.f-row .lbl{color:#e53e3e}
-.finp{width:62px;padding:4px 7px;border:1.5px solid #feb2b2;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center;color:#e53e3e;font-weight:700;background:#fff5f5}
-.finp:focus{outline:none;border-color:#e53e3e}
-.pbar-wrap{padding:8px 14px 10px;background:#f9fafb;border-top:1px solid #f0f4f8}
-.pbar-track{background:#e2e8f0;border-radius:6px;height:8px;overflow:hidden}
-.pbar-fill{height:8px;border-radius:6px;transition:width .3s,background .3s}
-.pbar-fill.ca{background:#48bb78}.pbar-fill.cbp,.pbar-fill.cb{background:#4299e1}
-.pbar-fill.ccp,.pbar-fill.cc{background:#ecc94b}.pbar-fill.cdp,.pbar-fill.cd{background:#ed8936}
-.pbar-fill.cf{background:#fc8181}.pbar-fill.cx{background:#cbd5e0}
-.pbar-meta{display:flex;justify-content:space-between;font-size:11.5px;color:#a0aec0;margin-top:3px}
-.btn-add-course{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#fff;border:2px dashed #d6bcfa;border-radius:12px;color:#553c9a;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all .15s}
+.btn-add-course{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#fff;border:2px dashed #d6bcfa;border-radius:12px;color:#553c9a;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all .15s}
 .btn-add-course:hover{background:#faf5ff;border-color:#b794f4}
-.summary-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 6px rgba(0,0,0,.08);margin-bottom:14px}
-.summary-card h2{font-size:16px;font-weight:700;color:#1a365d;margin-bottom:14px}
+.summary-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(124,58,237,.08);margin-bottom:14px;border:1.5px solid #f3e8ff}
+.summary-card h2{font-size:16px;font-weight:700;color:#553c9a;margin-bottom:14px}
 .sum-tbl{width:100%;border-collapse:collapse}
-.sum-tbl th{font-size:11.5px;color:#718096;font-weight:700;padding:7px 12px;background:#f7fafc;border-bottom:2px solid #e2e8f0;text-align:left}
-.sum-tbl td{padding:8px 12px;border-bottom:1px solid #f0f4f8;font-size:13px}
+.sum-tbl th{font-size:11.5px;color:#a78bfa;font-weight:700;padding:7px 12px;background:#f3e8ff;border-bottom:2px solid #c4b5fd;text-align:left}
+.sum-tbl td{padding:8px 12px;border-bottom:1px solid #f3e8ff;font-size:13px}
 .sum-tbl tr:last-child td{border-bottom:none}
 .gpa-box{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:16px 22px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-top:14px}
 .gpa-left .gpa-lbl{font-size:13.5px;font-weight:600;opacity:.9}
@@ -312,7 +301,7 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
   <div class="blob blob3"></div>
 
   <nav class="hero-nav">
-    <div class="hero-brand">🎓 CMU StudyHub</div>
+    <div class="hero-brand">🎓 StudyHub</div>
     <div class="hero-nav-right">
       <div id="user-area"></div>
       <button class="h-btn" style="font-size:12px" onclick="goAdmin()">⚙ Admin</button>
@@ -663,53 +652,38 @@ function renderLegend(){
   if(el) el.innerHTML=grades.map(g=>`<span class="gl ${g.cls}">${g.label}</span>`).join('');
 }
 
-function renderCard(c,idx){
+function renderTableRow(c,idx){
   const total=calcTotal(c);
   const gr=total!==null?calcGrade(total,c.fCut):null;
   const cls=gr?gr.cls:'cx';
-  const pct=total!==null?Math.min(100,total):0;
-  const trows=COMPONENTS.map(({key,label})=>{
+  const scoreCells=COMPONENTS.map(({key})=>{
     const s=c.scores[key];
-    const pctVal=(s.got!==''&&s.max!==''&&parseFloat(s.max)>0)?Math.round(parseFloat(s.got)/parseFloat(s.max)*100)+'%':'';
-    return `<tr><td class="lbl">${label}</td>
-      <td class="r"><input class="sinp" type="number" min="0" max="${s.max}" step="0.5" value="${s.got}" placeholder="—" oninput="updateScore(${c.id},'${key}','got',this.value)"></td>
-      <td class="r"><input class="minp" type="number" min="1" max="100" value="${s.max}" oninput="updateScore(${c.id},'${key}','max',this.value)"></td>
-      <td class="r pct-cell">${pctVal}</td></tr>`;
+    return `<td class="td-score"><input class="sinp-t" type="number" min="0" max="${s.max}" step="0.5" value="${s.got}" placeholder="—" oninput="updateScore(${c.id},'${key}','got',this.value)"><span class="max-hint">/${s.max}</span></td>`;
   }).join('');
-  return `<div class="course-card ${cls}" id="card-${c.id}">
-    <div class="card-top">
-      <div class="card-num">${idx+1}</div>
-      <input class="c-inp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)">
-      <input class="c-inp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)">
-      <input class="c-inp-cr" type="number" min="1" max="6" value="${c.credits}" title="หน่วยกิต" oninput="updateField(${c.id},'credits',this.value)">
-      <div class="grade-block">
-        <span class="score-total-txt">${total!==null?total+'/100':'—'}</span>
-        <span class="grade-badge ${cls}">${gr?gr.grade:'—'}</span>
-      </div>
-      <button class="btn-del" onclick="removeCourse(${c.id})">×</button>
-    </div>
-    <div class="score-wrap"><table class="stbl">
-      <thead><tr><th>องค์ประกอบ</th><th class="r">คะแนนที่ได้</th><th class="r">เต็ม</th><th class="r">%</th></tr></thead>
-      <tbody>${trows}
-        <tr class="f-row"><td class="lbl">ตัด F ที่</td><td class="r" colspan="3">
-          <input class="finp" type="number" min="0" max="90" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)">
-        </td></tr>
-      </tbody>
-    </table></div>
-    <div class="pbar-wrap">
-      <div class="pbar-track"><div class="pbar-fill ${cls}" style="width:${pct}%"></div></div>
-      <div class="pbar-meta">
-        <span>${total!==null?`คะแนนรวม ${total} คะแนน`:'ยังไม่ได้กรอกคะแนน'}</span>
-        <span>${gr?`เกรด ${gr.grade} (${gr.gp.toFixed(1)})`:''}</span>
-      </div>
-    </div>
-  </div>`;
+  return `<tr id="row-${c.id}" class="gtr ${cls}">
+    <td class="td-num">${idx+1}</td>
+    <td><input class="cinp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)"></td>
+    <td class="th-left"><input class="cinp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)"></td>
+    <td><input class="cinp-cr" type="number" min="1" max="6" value="${c.credits}" oninput="updateField(${c.id},'credits',this.value)"></td>
+    ${scoreCells}
+    <td><input class="finp-t" type="number" min="0" max="90" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)"></td>
+    <td class="td-total">${total!==null?total:'—'}</td>
+    <td><span class="grade-badge ${cls}">${gr?gr.grade:'—'}</span></td>
+    <td><button class="btn-del" onclick="removeCourse(${c.id})">×</button></td>
+  </tr>`;
 }
 
 function renderAll(){
   const container=document.getElementById('cards-container');
   if(!container) return;
-  container.innerHTML=courses.map((c,i)=>renderCard(c,i)).join('');
+  const headers=COMPONENTS.map(({label,defaultMax})=>`<th>${label}<span class="th-max">/${defaultMax}</span></th>`).join('');
+  container.innerHTML=`<div class="grade-table-wrap"><table class="gtable">
+    <thead><tr>
+      <th>#</th><th class="th-left">รหัสวิชา</th><th class="th-left">ชื่อวิชา</th><th>cr</th>
+      ${headers}<th>ตัด F</th><th>รวม</th><th>เกรด</th><th></th>
+    </tr></thead>
+    <tbody>${courses.map((c,i)=>renderTableRow(c,i)).join('')}</tbody>
+  </table></div>`;
   renderSummary();
 }
 
@@ -749,16 +723,16 @@ function updateField(id,field,val){
   if(field==='credits') c.credits=parseFloat(val)||3;
   else if(field==='fCut') c.fCut=val;
   else c[field]=val;
-  const el=document.getElementById('card-'+id);
-  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
+  const el=document.getElementById('row-'+id);
+  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderTableRow(c,idx); }
   renderSummary(); autoSaveScores();
 }
 
 function updateScore(id,key,field,val){
   const c=courses.find(x=>x.id===id); if(!c) return;
   c.scores[key][field]=val;
-  const el=document.getElementById('card-'+id);
-  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
+  const el=document.getElementById('row-'+id);
+  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderTableRow(c,idx); }
   renderSummary(); autoSaveScores();
 }
 
