@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
 <title>CMU StudyHub</title>
-<script>if(!sessionStorage.getItem('pastel_v3')){sessionStorage.setItem('pastel_v3','1');location.reload(true);}</script>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
@@ -1168,6 +1165,13 @@ document.querySelectorAll('.overlay').forEach(o=>{
 // ══════════════════════════
 renderTopUser();
 checkExpiry();
+(function(){
+  const go = sessionStorage.getItem('hub_goto');
+  if(!go) return;
+  sessionStorage.removeItem('hub_goto');
+  if(go==='grades') gotoFeature('grades');
+  else if(go==='payment') openPayment();
+})();
 </script>
 </body>
 </html>
