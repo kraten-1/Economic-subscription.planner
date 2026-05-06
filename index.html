@@ -686,12 +686,8 @@ function renderTableRow(c,idx){
   }).join('');
   return `<tr id="row-${c.id}" class="gtr ${cls}">
     <td class="td-num">${idx+1}</td>
-    <td class="th-left" colspan="2" style="text-align:left">
-      <div style="display:flex;flex-direction:column;gap:3px">
-        <input class="cinp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)" style="width:100%">
-        <input class="cinp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)" style="width:90px;font-size:11px;color:#a78bfa">
-      </div>
-    </td>
+    <td><input class="cinp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)"></td>
+    <td class="th-left"><input class="cinp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)"></td>
     <td><input class="cinp-cr" type="number" min="1" max="6" value="${c.credits}" oninput="updateField(${c.id},'credits',this.value)"></td>
     ${scoreCells}
     <td><input class="finp-t" type="number" min="0" max="90" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)"></td>
@@ -704,10 +700,10 @@ function renderTableRow(c,idx){
 function renderAll(){
   const container=document.getElementById('cards-container');
   if(!container) return;
-  const headers=COMPONENTS.map(({label})=>`<th>${label}<div class="th-sub"><span>คะแนนเต็ม</span><span>ทำได้</span></div></th>`).join('');
+  const headers=COMPONENTS.map(({label})=>`<th>${label}<div class="th-sub"><span>เต็ม</span><span>ได้</span></div></th>`).join('');
   container.innerHTML=`<div class="grade-table-wrap"><table class="gtable">
     <thead><tr>
-      <th>#</th><th class="th-left" colspan="2">ชื่อวิชา</th><th>cr</th>
+      <th>#</th><th class="th-left">รหัสวิชา</th><th class="th-left">ชื่อวิชา</th><th>cr</th>
       ${headers}<th>ตัด F</th><th>รวม</th><th>เกรด</th><th></th>
     </tr></thead>
     <tbody>${courses.map((c,i)=>renderTableRow(c,i)).join('')}</tbody>
