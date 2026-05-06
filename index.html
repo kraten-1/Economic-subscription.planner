@@ -807,7 +807,16 @@ function showScreen(id){
   const el=document.getElementById(id);
   el.classList.add('active');
   el.scrollTop=0;
-  window.scrollTo(0,0);
+  document.body.scrollTop=0;
+  document.documentElement.scrollTop=0;
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+  requestAnimationFrame(()=>{
+    document.body.scrollTop=0;
+    document.documentElement.scrollTop=0;
+    window.scrollTo(0,0);
+    const gs=el.querySelector('.grade-scroll');
+    if(gs) gs.scrollTop=0;
+  });
 }
 function goHero(){ showScreen('s-hero'); }
 
