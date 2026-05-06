@@ -12,8 +12,8 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .hidden{display:none!important}
 
 /* ── SCREENS ── */
-.screen{display:none;min-height:100vh}
-.screen.active{display:block}
+.screen{display:none}
+.screen.active{display:block;position:fixed;top:0;left:0;width:100%;height:100%;overflow-y:auto;z-index:10}
 
 /* ══════════════════════════════
    HERO  — pastel lavender-pink
@@ -807,16 +807,8 @@ function showScreen(id){
   const el=document.getElementById(id);
   el.classList.add('active');
   el.scrollTop=0;
-  document.body.scrollTop=0;
-  document.documentElement.scrollTop=0;
-  window.scrollTo({top:0,left:0,behavior:'instant'});
-  requestAnimationFrame(()=>{
-    document.body.scrollTop=0;
-    document.documentElement.scrollTop=0;
-    window.scrollTo(0,0);
-    const gs=el.querySelector('.grade-scroll');
-    if(gs) gs.scrollTop=0;
-  });
+  const gs=el.querySelector('.grade-scroll');
+  if(gs) gs.scrollTop=0;
 }
 function goHero(){ showScreen('s-hero'); }
 
