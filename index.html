@@ -118,34 +118,17 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .iframe-wrap iframe{flex:1;border:none;width:100%}
 
 /* ══════════════════════════════
-   GRADE CALCULATOR (spreadsheet)
+   GRADE CALCULATOR (card-based)
 ══════════════════════════════ */
 #s-grades{background:#fff0f5}
 .grade-page{display:flex;flex-direction:column;height:100vh}
-
-.grade-topbar{
-  height:48px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;padding:0 16px;
-  gap:12px;flex-shrink:0;
-}
+.grade-topbar{height:48px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
 .grade-topbar .iframe-back{color:rgba(255,255,255,.85);font-family:'Sarabun',sans-serif;font-size:13px;background:none;border:none;cursor:pointer}
 .grade-topbar .iframe-back:hover{color:#fff}
 .grade-topbar .iframe-lbl{color:#fff;font-size:14px;font-weight:700}
 
-.grade-toolbar{
-  background:rgba(255,255,255,.85);border-bottom:1px solid #d6bcfa;padding:8px 16px;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex-shrink:0;
-}
-.gt-label{font-size:13px;font-weight:600;color:#4a5568}
-.gt-input{width:60px;padding:5px 8px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center;outline:none}
-.gt-input:focus{border-color:#7c3aed}
-.gt-hint{font-size:12px;color:#94a3b8;flex:1}
-.gt-sem{font-size:13px;font-weight:600;color:#553c9a}
-
-/* subscription gate (inside grade page) */
-.sub-gate{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:30px;text-align:center;background:#fff;
-}
+/* subscription gate */
+.sub-gate{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;background:#fff0f5}
 .gate-icon{font-size:50px;margin-bottom:14px}
 .gate-title{font-size:22px;font-weight:700;color:#553c9a;margin-bottom:8px}
 .gate-sub{font-size:14px;color:#718096;line-height:1.75;max-width:400px;margin-bottom:22px}
@@ -158,88 +141,77 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
 .btn-pay:hover{opacity:.9}
 .pending-note{background:#fffbeb;border:1.5px solid #f6e05e;border-radius:12px;padding:11px 18px;font-size:13px;color:#744210;margin-top:12px;max-width:380px}
 
-/* SPREADSHEET */
-.sheet-wrap{flex:1;overflow:auto;background:rgba(255,255,255,.92);margin:12px;border-radius:12px;box-shadow:0 2px 12px rgba(102,126,234,.12)}
-.sheet-tbl{width:100%;border-collapse:collapse;min-width:900px}
+/* grade scroll area */
+.grade-scroll{flex:1;overflow-y:auto;padding:16px}
+.grade-inner{max-width:860px;margin:0 auto}
 
-/* header row */
-.sheet-tbl thead tr{background:#d9ead3;position:sticky;top:0;z-index:10}
-.sheet-tbl thead th{
-  padding:9px 12px;font-size:12.5px;font-weight:700;color:#274e13;
-  border:1px solid #b6d7a8;text-align:center;white-space:nowrap;
-  user-select:none;
-}
-.sheet-tbl thead th.col-code{background:#b6d7a8;width:90px}
-.sheet-tbl thead th.col-name{text-align:left;min-width:200px}
-.sheet-tbl thead th.col-calc{background:#d9ead3;color:#1a4706}
+/* global bar */
+.global-bar{background:#fff;border-radius:12px;padding:13px 18px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:center;flex-wrap:wrap;gap:16px}
+.global-bar label{font-weight:600;font-size:13.5px}
+.global-bar input[type=number]{width:70px;padding:6px 9px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:14px;text-align:center}
+.global-bar input:focus{outline:none;border-color:#667eea}
+.global-hint{font-size:12px;color:#718096;flex:1;min-width:200px}
+.grade-legend{display:flex;flex-wrap:wrap;gap:5px}
+.gl{font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.gl.a{background:#c6f6d5;color:#22543d}.gl.bp{background:#bee3f8;color:#2a4365}
+.gl.b{background:#dbeafe;color:#1e40af}.gl.cp{background:#fef9c3;color:#854d0e}
+.gl.c{background:#fef3c7;color:#92400e}.gl.dp{background:#ffedd5;color:#9a3412}
+.gl.d{background:#fde8d8;color:#9a3412}.gl.f{background:#fee2e2;color:#991b1b}
 
-/* max row */
-.max-row td{
-  background:#e8f5e2;border:1px solid #b6d7a8;padding:5px 8px;
-  font-size:11.5px;color:#3d6b21;text-align:center;font-weight:600;
-}
-.max-row td.lbl{color:#5a7d3a;font-style:italic;font-size:11px}
-.max-inp{
-  width:48px;padding:2px 5px;border:1px solid #9fcf87;border-radius:4px;
-  font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;
-  background:#f4fbf0;outline:none;color:#274e13;font-weight:600;
-}
-.max-inp:focus{border-color:#4caf50;background:#fff}
-
-/* data rows */
-.sheet-tbl tbody tr:nth-child(even){background:#f8fdf6}
-.sheet-tbl tbody tr:nth-child(odd){background:#fff}
-.sheet-tbl tbody tr:hover td{background:#f0fae8!important}
-.sheet-tbl td{border:1px solid #d4e6cc;padding:5px 8px;font-size:13px;vertical-align:middle}
-
-.cell-code{
-  font-weight:700;font-size:12px;color:#274e13;text-align:center;
-  background:#e8f5e2!important;
-}
-.cell-name{color:#2d3748}
-.cell-num{text-align:center;color:#2d3748}
-.cell-total{font-weight:700;font-size:13px;text-align:center;color:#1a4706;background:#f0fae8!important}
-.cell-grade{font-weight:700;font-size:14px;text-align:center}
-
-/* grade colors */
-.g-a{color:#166534;background:#dcfce7!important}
-.g-bp{color:#1e40af;background:#dbeafe!important}
-.g-b{color:#1d4ed8;background:#eff6ff!important}
-.g-cp{color:#854d0e;background:#fef9c3!important}
-.g-c{color:#92400e;background:#fef3c7!important}
-.g-dp{color:#9a3412;background:#ffedd5!important}
-.g-d{color:#9a3412;background:#fde8d8!important}
-.g-f{color:#991b1b;background:#fee2e2!important}
-
-.sheet-inp{
-  width:100%;padding:4px 6px;border:none;background:transparent;
-  font-family:'Sarabun',sans-serif;font-size:13px;text-align:center;
-  outline:none;color:#2d3748;
-}
-.sheet-inp:focus{background:#fffde7;border-radius:3px}
-.inp-code{text-align:center;font-weight:700;color:#274e13}
-.inp-name{text-align:left;min-width:160px}
-.inp-fcut{color:#991b1b;font-weight:700}
-
-.btn-del-row{background:none;border:none;color:#fca5a5;font-size:16px;cursor:pointer;padding:0 4px;line-height:1}
-.btn-del-row:hover{color:#ef4444}
-
-/* sheet footer */
-.sheet-footer{
-  background:rgba(255,255,255,.85);border-top:2px solid #d6bcfa;padding:12px 16px;
-  display:flex;align-items:center;gap:12px;flex-shrink:0;
-}
-.btn-add-row{
-  background:#fff;border:1.5px solid #b6d7a8;border-radius:8px;
-  padding:7px 16px;font-family:'Sarabun',sans-serif;font-size:13px;
-  font-weight:600;color:#274e13;cursor:pointer;display:flex;align-items:center;gap:6px;
-}
-.btn-add-row:hover{background:#f0fae8}
-.gpa-pill{
-  margin-left:auto;background:linear-gradient(135deg,#553c9a,#7c3aed);
-  color:#fff;border-radius:12px;padding:7px 18px;font-size:14px;font-weight:700;
-}
-.gpa-pill span{font-size:11px;opacity:.8;margin-right:4px}
+/* course card */
+.course-card{background:#fff;border-radius:14px;margin-bottom:14px;box-shadow:0 1px 6px rgba(0,0,0,.08);overflow:hidden;border-left:5px solid #e2e8f0;transition:border-color .25s}
+.course-card.ca{border-left-color:#38a169}.course-card.cbp,.course-card.cb{border-left-color:#3182ce}
+.course-card.ccp,.course-card.cc{border-left-color:#d69e2e}.course-card.cdp,.course-card.cd{border-left-color:#ed8936}
+.course-card.cf{border-left-color:#e53e3e}
+.card-top{display:flex;align-items:center;gap:9px;padding:11px 14px;background:#f7fafc;border-bottom:1px solid #e2e8f0;flex-wrap:wrap}
+.card-num{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-inp-code{width:88px;padding:6px 8px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700}
+.c-inp-name{flex:1;min-width:140px;padding:6px 8px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px}
+.c-inp-cr{width:52px;padding:6px 7px;border:1.5px solid #e2e8f0;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center}
+.card-top input:focus{outline:none;border-color:#667eea}
+.grade-block{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.grade-badge{font-size:17px;font-weight:700;padding:4px 13px;border-radius:8px;min-width:50px;text-align:center}
+.grade-badge.ca{background:#c6f6d5;color:#22543d}.grade-badge.cbp{background:#bee3f8;color:#1e3a5f}
+.grade-badge.cb{background:#dbeafe;color:#1e40af}.grade-badge.ccp{background:#fef9c3;color:#713f12}
+.grade-badge.cc{background:#fef3c7;color:#78350f}.grade-badge.cdp{background:#ffedd5;color:#7c2d12}
+.grade-badge.cd{background:#fde8d8;color:#7c2d12}.grade-badge.cf{background:#fee2e2;color:#7f1d1d}
+.grade-badge.cx{background:#edf2f7;color:#a0aec0}
+.score-total-txt{font-size:12.5px;color:#718096;font-weight:600}
+.btn-del{background:none;border:none;color:#fc8181;cursor:pointer;font-size:20px;padding:0 3px;line-height:1;flex-shrink:0}
+.btn-del:hover{color:#e53e3e}
+.score-wrap{padding:0}
+.stbl{width:100%;border-collapse:collapse}
+.stbl th{font-size:11px;color:#a0aec0;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:6px 14px;text-align:left;background:#fafafa;border-bottom:1px solid #f0f4f8}
+.stbl th.r,.stbl td.r{text-align:center}
+.stbl td{padding:7px 14px;border-bottom:1px solid #f7fafc;font-size:13px;vertical-align:middle}
+.stbl tr:last-child td{border-bottom:none}
+.stbl td.lbl{font-weight:600;color:#4a5568;white-space:nowrap}
+.sinp{width:62px;padding:4px 7px;border:1.5px solid #e2e8f0;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center}
+.minp{width:50px;padding:4px 6px;border:1.5px solid #e2e8f0;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:12px;text-align:center;color:#718096}
+.sinp:focus,.minp:focus{outline:none;border-color:#667eea}
+.pct-cell{font-size:11.5px;color:#a0aec0;min-width:44px}
+.f-row td{background:#fff5f5}.f-row .lbl{color:#e53e3e}
+.finp{width:62px;padding:4px 7px;border:1.5px solid #feb2b2;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:13px;text-align:center;color:#e53e3e;font-weight:700;background:#fff5f5}
+.finp:focus{outline:none;border-color:#e53e3e}
+.pbar-wrap{padding:8px 14px 10px;background:#f9fafb;border-top:1px solid #f0f4f8}
+.pbar-track{background:#e2e8f0;border-radius:6px;height:8px;overflow:hidden}
+.pbar-fill{height:8px;border-radius:6px;transition:width .3s,background .3s}
+.pbar-fill.ca{background:#48bb78}.pbar-fill.cbp,.pbar-fill.cb{background:#4299e1}
+.pbar-fill.ccp,.pbar-fill.cc{background:#ecc94b}.pbar-fill.cdp,.pbar-fill.cd{background:#ed8936}
+.pbar-fill.cf{background:#fc8181}.pbar-fill.cx{background:#cbd5e0}
+.pbar-meta{display:flex;justify-content:space-between;font-size:11.5px;color:#a0aec0;margin-top:3px}
+.btn-add-course{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#fff;border:2px dashed #d6bcfa;border-radius:12px;color:#553c9a;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:16px;transition:all .15s}
+.btn-add-course:hover{background:#faf5ff;border-color:#b794f4}
+.summary-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 6px rgba(0,0,0,.08);margin-bottom:14px}
+.summary-card h2{font-size:16px;font-weight:700;color:#1a365d;margin-bottom:14px}
+.sum-tbl{width:100%;border-collapse:collapse}
+.sum-tbl th{font-size:11.5px;color:#718096;font-weight:700;padding:7px 12px;background:#f7fafc;border-bottom:2px solid #e2e8f0;text-align:left}
+.sum-tbl td{padding:8px 12px;border-bottom:1px solid #f0f4f8;font-size:13px}
+.sum-tbl tr:last-child td{border-bottom:none}
+.gpa-box{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:16px 22px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.gpa-left .gpa-lbl{font-size:13.5px;font-weight:600;opacity:.9}
+.gpa-left .gpa-cr{font-size:12px;opacity:.75;margin-top:2px}
+.gpa-val{font-size:34px;font-weight:700}
 
 /* ══════════════════════════════
    ADMIN LOGIN
@@ -411,41 +383,21 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
       <div class="pending-note hidden" id="pending-note">⏳ สลิปของคุณอยู่ระหว่างการตรวจสอบ กรุณารอ 1–24 ชั่วโมง</div>
     </div>
 
-    <!-- SPREADSHEET (unlocked) -->
+    <!-- GRADE CONTENT (unlocked) -->
     <div id="grades-content" class="hidden" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
-
-      <div class="grade-toolbar">
-        <span class="gt-sem" id="sem-label">📌 ปี 3 เทอม 1</span>
-        <span class="gt-label">ตัด F ทั้งหมด</span>
-        <input class="gt-input" type="number" id="global-f" value="50" min="0" max="90" oninput="onGlobalF()">
-        <span class="gt-hint">เกณฑ์นี้ใช้กับทุกวิชา (แก้รายวิชาได้ในคอลัมน์ ตัด F)</span>
+      <div class="grade-scroll">
+        <div class="grade-inner">
+          <div class="global-bar">
+            <label>ตัด F ที่คะแนน</label>
+            <input type="number" id="global-f" value="50" min="0" max="90" oninput="onGlobalFChange()">
+            <div class="global-hint" id="sem-label">กรอกวิชาจากแผนการเรียน หรือเพิ่มเองได้เลย</div>
+            <div class="grade-legend" id="grade-legend"></div>
+          </div>
+          <div id="cards-container"></div>
+          <button class="btn-add-course" onclick="addCourse()">＋ เพิ่มวิชา</button>
+          <div id="summary-area"></div>
+        </div>
       </div>
-
-      <div class="sheet-wrap">
-        <table class="sheet-tbl" id="sheet">
-          <thead>
-            <tr>
-              <th class="col-code">รหัสวิชา</th>
-              <th class="col-name">ชื่อวิชา</th>
-              <th>ตัด&nbsp;F</th>
-              <th>งานกลุ่ม</th>
-              <th>การบ้าน</th>
-              <th>Midterms</th>
-              <th>Final</th>
-              <th class="col-calc">คะแนนรวม</th>
-              <th class="col-calc">เกรด</th>
-              <th style="width:30px"></th>
-            </tr>
-          </thead>
-          <tbody id="sheet-body"></tbody>
-        </table>
-      </div>
-
-      <div class="sheet-footer">
-        <button class="btn-add-row" onclick="addRow()">＋ เพิ่มวิชา</button>
-        <div class="gpa-pill"><span>GPA</span><span id="gpa-val">—</span></div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -559,7 +511,8 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
     <h2>สมัคร Premium</h2>
     <p>โอนเงินผ่านพร้อมเพย์แล้วแนบสลิป ทีมงานจะเปิดใช้งานภายใน 24 ชั่วโมง</p>
     <div class="pp-box">
-      <div class="pp-lbl">เลขพร้อมเพย์</div>
+      <div class="pp-lbl">สแกน QR พร้อมเพย์ หรือโอนผ่านเบอร์</div>
+      <img src="./promptpay-qr.jpg" alt="QR PromptPay" style="width:180px;height:auto;margin:8px auto;display:block;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12)">
       <div><span class="pp-num">090-293-5084</span><button class="pp-copy" onclick="copyPP()">คัดลอก</button></div>
       <div class="pp-amt">ยอดชำระ: <strong>19 บาท / เดือน</strong></div>
     </div>
@@ -647,113 +600,172 @@ const S={
 };
 
 // ══════════════════════════
-// SPREADSHEET DATA
+// GRADE CALCULATOR DATA
 // ══════════════════════════
-let MAX = { group:20, hw:10, mid:25, final:35 };
-let globalF = 50;
-let rows = [
-  {id:1,code:'751422',name:'การวิเคราะห์เทคนิคการลงทุน/ดูกราฟ',cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:2,code:'751305',name:'Econometrics 1 เศรษฐมิติ 1',        cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:3,code:'707201',name:'Entrepreneurial Spirit and Personal Development',cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:4,code:'751333',name:'Applied Game Theory for Economic Analysis',cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:5,code:'751303',name:'Public Finance',                     cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:6,code:'702211',name:'Business Finance 1',                 cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-  {id:7,code:'751309',name:'Macroeconomic 2',                    cr:3,fcut:'',group:'',hw:'',mid:'',final:''},
-];
-let nextRowId=8;
+let globalF=50;
+let courses=[];
+let nextId=1;
 
-function calcGrade(score,fCut){
-  const f=parseFloat(fCut)||globalF;
-  if(isNaN(score)||score===null) return null;
-  if(score<=f)     return{grade:'F', gp:0.0,cls:'g-f'};
-  if(score<=f+5)   return{grade:'D', gp:1.0,cls:'g-d'};
-  if(score<=f+10)  return{grade:'D+',gp:1.5,cls:'g-dp'};
-  if(score<=f+15)  return{grade:'C', gp:2.0,cls:'g-c'};
-  if(score<=f+20)  return{grade:'C+',gp:2.5,cls:'g-cp'};
-  if(score<=f+25)  return{grade:'B', gp:3.0,cls:'g-b'};
-  if(score<=f+30)  return{grade:'B+',gp:3.5,cls:'g-bp'};
-  return               {grade:'A', gp:4.0,cls:'g-a'};
+const COMPONENTS=[
+  {key:'mid',   label:'สอบกลางภาค',  defaultMax:25},
+  {key:'final', label:'สอบไฟนอล',    defaultMax:35},
+  {key:'group', label:'งานกลุ่ม',     defaultMax:20},
+  {key:'hw',    label:'การบ้าน',      defaultMax:10},
+  {key:'attend',label:'การเข้าเรียน', defaultMax:10},
+];
+
+function newCourse(code='',name='',cr=3){
+  const scores={};
+  COMPONENTS.forEach(({key,defaultMax})=>{ scores[key]={got:'',max:String(defaultMax)}; });
+  return{id:nextId++,code,name,credits:cr,fCut:String(globalF),scores};
 }
 
-function calcTotal(r){
-  const keys=['group','hw','mid','final'];
-  const maxK=['group','hw','mid','final'];
+function calcGrade(score,fCut){
+  const f=parseFloat(fCut);
+  if(isNaN(score)||score===null) return null;
+  if(score<=f)    return{grade:'F', gp:0.0,cls:'cf'};
+  if(score<=f+5)  return{grade:'D', gp:1.0,cls:'cd'};
+  if(score<=f+10) return{grade:'D+',gp:1.5,cls:'cdp'};
+  if(score<=f+15) return{grade:'C', gp:2.0,cls:'cc'};
+  if(score<=f+20) return{grade:'C+',gp:2.5,cls:'ccp'};
+  if(score<=f+25) return{grade:'B', gp:3.0,cls:'cb'};
+  if(score<=f+30) return{grade:'B+',gp:3.5,cls:'cbp'};
+  return               {grade:'A', gp:4.0,cls:'ca'};
+}
+
+function calcTotal(c){
   let got=0,max=0;
-  keys.forEach((k,i)=>{
-    const g=parseFloat(r[k]);
-    const m=parseFloat(MAX[maxK[i]]);
+  COMPONENTS.forEach(({key})=>{
+    const g=parseFloat(c.scores[key].got), m=parseFloat(c.scores[key].max);
     if(!isNaN(g)&&!isNaN(m)&&m>0){got+=g;max+=m;}
   });
   if(max===0) return null;
-  return Math.round((got/max)*100*10)/10;
+  return Math.min(100,Math.round((got/max)*100*10)/10);
 }
 
-function renderSheet(){
-  const tbody=document.getElementById('sheet-body');
-  tbody.innerHTML='';
+function renderLegend(){
+  const f=globalF;
+  const grades=[
+    {label:`A (≥${f+31})`,cls:'a'},{label:`B+ (${f+26}–${f+30})`,cls:'bp'},
+    {label:`B (${f+21}–${f+25})`,cls:'b'},{label:`C+ (${f+16}–${f+20})`,cls:'cp'},
+    {label:`C (${f+11}–${f+15})`,cls:'c'},{label:`D+ (${f+6}–${f+10})`,cls:'dp'},
+    {label:`D (${f+1}–${f+5})`,cls:'d'},{label:`F (≤${f})`,cls:'f'},
+  ];
+  const el=document.getElementById('grade-legend');
+  if(el) el.innerHTML=grades.map(g=>`<span class="gl ${g.cls}">${g.label}</span>`).join('');
+}
 
-  // max row
-  const mx=document.createElement('tr');
-  mx.className='max-row';
-  mx.innerHTML=`
-    <td class="lbl" colspan="2" style="text-align:right;padding-right:10px">คะแนนเต็ม →</td>
-    <td></td>
-    <td><input class="max-inp" type="number" value="${MAX.group}"  min="1" max="100" oninput="MAX.group=+this.value;recalc()"></td>
-    <td><input class="max-inp" type="number" value="${MAX.hw}"     min="1" max="100" oninput="MAX.hw=+this.value;recalc()"></td>
-    <td><input class="max-inp" type="number" value="${MAX.mid}"    min="1" max="100" oninput="MAX.mid=+this.value;recalc()"></td>
-    <td><input class="max-inp" type="number" value="${MAX.final}"  min="1" max="100" oninput="MAX.final=+this.value;recalc()"></td>
-    <td></td><td></td><td></td>`;
-  tbody.appendChild(mx);
+function renderCard(c,idx){
+  const total=calcTotal(c);
+  const gr=total!==null?calcGrade(total,c.fCut):null;
+  const cls=gr?gr.cls:'cx';
+  const pct=total!==null?Math.min(100,total):0;
+  const trows=COMPONENTS.map(({key,label})=>{
+    const s=c.scores[key];
+    const pctVal=(s.got!==''&&s.max!==''&&parseFloat(s.max)>0)?Math.round(parseFloat(s.got)/parseFloat(s.max)*100)+'%':'';
+    return `<tr><td class="lbl">${label}</td>
+      <td class="r"><input class="sinp" type="number" min="0" max="${s.max}" step="0.5" value="${s.got}" placeholder="—" oninput="updateScore(${c.id},'${key}','got',this.value)"></td>
+      <td class="r"><input class="minp" type="number" min="1" max="100" value="${s.max}" oninput="updateScore(${c.id},'${key}','max',this.value)"></td>
+      <td class="r pct-cell">${pctVal}</td></tr>`;
+  }).join('');
+  return `<div class="course-card ${cls}" id="card-${c.id}">
+    <div class="card-top">
+      <div class="card-num">${idx+1}</div>
+      <input class="c-inp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)">
+      <input class="c-inp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)">
+      <input class="c-inp-cr" type="number" min="1" max="6" value="${c.credits}" title="หน่วยกิต" oninput="updateField(${c.id},'credits',this.value)">
+      <div class="grade-block">
+        <span class="score-total-txt">${total!==null?total+'/100':'—'}</span>
+        <span class="grade-badge ${cls}">${gr?gr.grade:'—'}</span>
+      </div>
+      <button class="btn-del" onclick="removeCourse(${c.id})">×</button>
+    </div>
+    <div class="score-wrap"><table class="stbl">
+      <thead><tr><th>องค์ประกอบ</th><th class="r">คะแนนที่ได้</th><th class="r">เต็ม</th><th class="r">%</th></tr></thead>
+      <tbody>${trows}
+        <tr class="f-row"><td class="lbl">ตัด F ที่</td><td class="r" colspan="3">
+          <input class="finp" type="number" min="0" max="90" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)">
+        </td></tr>
+      </tbody>
+    </table></div>
+    <div class="pbar-wrap">
+      <div class="pbar-track"><div class="pbar-fill ${cls}" style="width:${pct}%"></div></div>
+      <div class="pbar-meta">
+        <span>${total!==null?`คะแนนรวม ${total} คะแนน`:'ยังไม่ได้กรอกคะแนน'}</span>
+        <span>${gr?`เกรด ${gr.grade} (${gr.gp.toFixed(1)})`:''}</span>
+      </div>
+    </div>
+  </div>`;
+}
 
+function renderAll(){
+  const container=document.getElementById('cards-container');
+  if(!container) return;
+  container.innerHTML=courses.map((c,i)=>renderCard(c,i)).join('');
+  renderSummary();
+}
+
+function renderSummary(){
+  const area=document.getElementById('summary-area'); if(!area) return;
+  const trows=courses.map(c=>{
+    const total=calcTotal(c); const gr=total!==null?calcGrade(total,c.fCut):null;
+    return `<tr><td>${c.code||'—'}</td><td>${c.name||'—'}</td>
+      <td style="text-align:center">${c.credits}</td>
+      <td style="text-align:center">${total!==null?total:'—'}</td>
+      <td style="text-align:center"><span class="grade-badge ${gr?gr.cls:'cx'}" style="font-size:13px;padding:2px 9px">${gr?gr.grade:'—'}</span></td>
+      <td style="text-align:center">${gr?gr.gp.toFixed(1):'—'}</td></tr>`;
+  }).join('');
   let sumGp=0,sumCr=0;
-  rows.forEach(r=>{
-    const total=calcTotal(r);
-    const gr=total!==null?calcGrade(total,r.fcut):null;
-    const tr=document.createElement('tr');
-    tr.id='row-'+r.id;
-    tr.innerHTML=`
-      <td class="cell-code"><input class="sheet-inp inp-code" value="${r.code}" placeholder="รหัส" oninput="updateRow(${r.id},'code',this.value)"></td>
-      <td class="cell-name"><input class="sheet-inp inp-name" value="${r.name}" placeholder="ชื่อวิชา" oninput="updateRow(${r.id},'name',this.value)"></td>
-      <td class="cell-num"><input class="sheet-inp inp-fcut" type="number" value="${r.fcut}" placeholder="${globalF}" min="0" max="90" style="width:52px" oninput="updateRow(${r.id},'fcut',this.value)"></td>
-      <td class="cell-num"><input class="sheet-inp" type="number" value="${r.group}" placeholder="—" min="0" max="${MAX.group}" step="0.5" style="width:60px" oninput="updateRow(${r.id},'group',this.value)"></td>
-      <td class="cell-num"><input class="sheet-inp" type="number" value="${r.hw}"    placeholder="—" min="0" max="${MAX.hw}"    step="0.5" style="width:60px" oninput="updateRow(${r.id},'hw',this.value)"></td>
-      <td class="cell-num"><input class="sheet-inp" type="number" value="${r.mid}"   placeholder="—" min="0" max="${MAX.mid}"   step="0.5" style="width:60px" oninput="updateRow(${r.id},'mid',this.value)"></td>
-      <td class="cell-num"><input class="sheet-inp" type="number" value="${r.final}" placeholder="—" min="0" max="${MAX.final}" step="0.5" style="width:60px" oninput="updateRow(${r.id},'final',this.value)"></td>
-      <td class="cell-total">${total!==null?total:'—'}</td>
-      <td class="cell-grade ${gr?gr.cls:''}">${gr?gr.grade:'—'}</td>
-      <td><button class="btn-del-row" onclick="delRow(${r.id})">×</button></td>`;
-    tbody.appendChild(tr);
-
-    if(gr!==null&&total!==null){
-      const cr=parseFloat(r.cr)||3;
-      sumGp+=gr.gp*cr; sumCr+=cr;
-    }
+  courses.forEach(c=>{
+    const total=calcTotal(c); if(total===null) return;
+    const gr=calcGrade(total,c.fCut); const cr=parseFloat(c.credits)||3;
+    sumGp+=gr.gp*cr; sumCr+=cr;
   });
-
   const gpa=sumCr>0?(sumGp/sumCr).toFixed(2):'—';
-  document.getElementById('gpa-val').textContent=gpa;
+  area.innerHTML=`<div class="summary-card">
+    <h2>📊 สรุปผลเทอมนี้</h2>
+    <table class="sum-tbl"><thead><tr>
+      <th>รหัส</th><th>ชื่อวิชา</th><th style="text-align:center">cr</th>
+      <th style="text-align:center">คะแนน</th><th style="text-align:center">เกรด</th>
+      <th style="text-align:center">Grade Point</th>
+    </tr></thead><tbody>${trows}</tbody></table>
+    <div class="gpa-box">
+      <div class="gpa-left"><div class="gpa-lbl">GPA เทอมนี้</div><div class="gpa-cr">${sumCr} หน่วยกิต</div></div>
+      <div class="gpa-val">${gpa}</div>
+    </div>
+  </div>`;
 }
 
-function updateRow(id,key,val){
-  const r=rows.find(x=>x.id===id); if(!r) return;
-  r[key]=val; recalc();
+function updateField(id,field,val){
+  const c=courses.find(x=>x.id===id); if(!c) return;
+  if(field==='credits') c.credits=parseFloat(val)||3;
+  else if(field==='fCut') c.fCut=val;
+  else c[field]=val;
+  const el=document.getElementById('card-'+id);
+  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
+  renderSummary();
 }
 
-function recalc(){ renderSheet(); }
-
-function addRow(){
-  rows.push({id:nextRowId++,code:'',name:'',cr:3,fcut:'',group:'',hw:'',mid:'',final:''});
-  renderSheet();
+function updateScore(id,key,field,val){
+  const c=courses.find(x=>x.id===id); if(!c) return;
+  c.scores[key][field]=val;
+  const el=document.getElementById('card-'+id);
+  if(el){ const idx=courses.findIndex(x=>x.id===id); el.outerHTML=renderCard(c,idx); }
+  renderSummary();
 }
 
-function delRow(id){
-  if(rows.length<=1) return;
-  rows=rows.filter(r=>r.id!==id); renderSheet();
+function addCourse(){
+  courses.push(newCourse()); renderAll();
 }
 
-function onGlobalF(){
+function removeCourse(id){
+  if(courses.length<=1) return;
+  courses=courses.filter(c=>c.id!==id); renderAll();
+}
+
+function onGlobalFChange(){
   globalF=parseFloat(document.getElementById('global-f').value)||50;
-  renderSheet();
+  courses.forEach(c=>{c.fCut=String(globalF);}); renderLegend(); renderAll();
 }
 
 // ══════════════════════════
@@ -805,9 +817,9 @@ function loadCoursesFromPlanner(){
   try{
     const list=JSON.parse(saved);
     if(!list||!list.length) return;
-    rows=list.map((c,i)=>({id:i+1,code:c.code||'',name:c.name||'',cr:parseFloat(c.cr)||3,fcut:'',group:'',hw:'',mid:'',final:''}));
-    nextRowId=rows.length+1;
-    document.getElementById('sem-label').textContent='📌 วิชาที่กำลังเรียน (จากแผนการเรียน)';
+    courses=list.map(c=>newCourse(c.code||'',c.name||'',parseFloat(c.cr)||3));
+    const lbl=document.getElementById('sem-label');
+    if(lbl) lbl.textContent=`📌 วิชาที่กำลังเรียน — ${list.length} วิชาจากแผนการเรียน`;
   }catch(e){}
 }
 
@@ -819,8 +831,8 @@ function refreshGate(){
     gate.classList.add('hidden');
     content.classList.remove('hidden');
     content.style.display='flex';
-    loadCoursesFromPlanner();
-    renderSheet();
+    if(courses.length===0){ loadCoursesFromPlanner(); if(courses.length===0){ courses=[newCourse()]; } }
+    renderLegend(); renderAll();
   } else {
     gate.classList.remove('hidden');
     content.style.display='none';
