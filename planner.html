@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CMU Econ Planner</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Sarabun',sans-serif;font-size:15px;background:#fff0f5;color:#2d3748}
@@ -19,11 +20,18 @@
     /* Back to hub */
     .hub-back{position:fixed;top:14px;left:14px;z-index:999;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(102,126,234,.4)}
     .hub-back:hover{opacity:.9}
-    .hub-pay{position:fixed;top:14px;left:140px;z-index:999;background:linear-gradient(135deg,#f472b6,#a855f7);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(168,85,247,.35)}
-    .hub-pay:hover{opacity:.9}
     /* Save for grades button */
     .btn-save-grades{display:block;width:100%;max-width:400px;margin:12px auto 0;padding:13px;background:linear-gradient(135deg,#553c9a,#7c3aed);color:#fff;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.35)}
     .btn-save-grades:hover{opacity:.9}
+    /* Premium actions */
+    #premium-actions{display:none;max-width:400px;margin:8px auto 0;display:none;gap:8px}
+    .btn-save-data{flex:1;padding:12px;background:linear-gradient(135deg,#38a169,#276749);color:#fff;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(56,161,105,.3)}
+    .btn-save-data:hover{opacity:.9}
+    .btn-clear-data{flex:1;padding:12px;background:#fff;color:#e53e3e;border:2px solid #feb2b2;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+    .btn-clear-data:hover{background:#fff5f5}
+    .premium-badge{background:linear-gradient(135deg,#f6ad55,#ed8936);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;margin-left:8px}
+    #planner-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a365d;color:#fff;padding:10px 22px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.25);opacity:0;transition:opacity .3s;pointer-events:none}
+    #autosave-ind{position:fixed;bottom:16px;right:16px;background:#48bb78;color:#fff;font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.15);opacity:0;transition:opacity .3s;pointer-events:none}
     /* Program selector */
     .prog-row{display:flex;justify-content:center;margin-bottom:20px}
     .prog-seg .seg-opt{padding:9px 28px;font-size:15px}
@@ -166,7 +174,6 @@
 </div>
 
 <button class="hub-back" onclick="window.location.href='./'">← กลับหน้าหลัก</button>
-<button class="hub-pay" onclick="goPayment()">💳 สมัคร/จ่ายเงิน</button>
 
 <!-- SCREEN 1: SETUP -->
 <div id="screen-setup">
@@ -212,8 +219,14 @@
     <div id="search-results-panel" style="display:none"></div>
     <button class="btn-gen" id="txt-btn-gen" onclick="generateResult()"></button>
     <button class="btn-save-grades" onclick="saveForGrades()">📊 บันทึกวิชาที่กำลังเรียน → ส่งไปคำนวณเกรด</button>
+    <div id="premium-actions" style="display:none;max-width:400px;margin:8px auto 0;display:none;gap:8px;flex-direction:row">
+      <button class="btn-save-data" onclick="savePlannerData()">💾 บันทึกข้อมูล</button>
+      <button class="btn-clear-data" onclick="clearPlannerData()">🗑️ ล้างข้อมูล</button>
+    </div>
   </div>
 </div>
+<div id="planner-toast"></div>
+<div id="autosave-ind">💾 บันทึกอัตโนมัติ...</div>
 
 <!-- SCREEN 2: RESULT -->
 <div id="screen-result" style="display:none">
@@ -221,22 +234,6 @@
     <button class="btn-back" id="txt-btn-back" onclick="goBack()"></button>
     <div id="result-content"></div>
 
-    <!-- Grade calculator promo -->
-    <div style="background:linear-gradient(135deg,#553c9a,#7c3aed);border-radius:18px;padding:22px 24px;margin:20px 0;color:#fff;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-      <div style="flex:1;min-width:200px">
-        <div style="font-size:11px;font-weight:700;opacity:.75;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">🧮 Premium Feature</div>
-        <div style="font-size:20px;font-weight:700;margin-bottom:6px">โปรแกรมช่วยคิดเกรด</div>
-        <div style="font-size:13px;opacity:.85;line-height:1.7;margin-bottom:14px">กรอกคะแนนแต่ละองค์ประกอบ ระบบคำนวณเกรดให้เลย ดู GPA รวม วิเคราะห์ว่าควรดรอปหรือสู้ต่อ เพียง <strong>19฿/เดือน</strong></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button onclick="saveForGrades()" style="background:#fff;color:#553c9a;border:none;border-radius:20px;padding:9px 20px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer">📊 บันทึกวิชาแล้วไปคิดเกรด →</button>
-          <button onclick="document.getElementById('promo-qr').classList.toggle('hidden')" style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:20px;padding:9px 20px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer">📱 สแกนจ่าย 19฿</button>
-        </div>
-      </div>
-      <div id="promo-qr" class="hidden" style="text-align:center;flex-shrink:0">
-        <img src="./promptpay-qr.jpg" alt="QR PromptPay" style="width:150px;height:auto;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.25)">
-        <div style="font-size:11px;opacity:.8;margin-top:6px">โอน 19฿ แล้วส่งสลิปที่เว็บ</div>
-      </div>
-    </div>
 
     <div class="support-box">
       <h3>💜 <span id="txt-support-title"></span></h3>
@@ -776,6 +773,7 @@ function cycleStatus(code, cr, secId, pickId) {
   refreshBadge(secId);
   if(pickId) refreshPickCounter(pickId);
   if (document.getElementById('search-results-panel')?.style.display !== 'none') renderSearchPanel();
+  scheduleAutoSave();
 }
 
 function refreshBadge(secId) {
@@ -1118,9 +1116,130 @@ function goPayment(){
   window.location.href = './';
 }
 
+// ══════════════════════════════════════════
+// SUPABASE + PREMIUM BACKUP
+// ══════════════════════════════════════════
+const SB_URL='https://ebvhqyzfloxinpoubvxc.supabase.co';
+const SB_KEY='sb_publishable_Q3HkOHw2BSzcGcvjFRUCsA_J8IXkVmX';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+
+let _premiumUser=null;
+let _isPremium=false;
+let _autoSaveTimer=null;
+
+async function initPremium(){
+  try{
+    const u=JSON.parse(localStorage.getItem('hub_user')||'null');
+    const sub=localStorage.getItem('hub_sub');
+    if(!u||sub!=='active') return;
+    _premiumUser=u;
+    _isPremium=true;
+    const pa=document.getElementById('premium-actions');
+    if(pa) pa.style.display='flex';
+    const h1=document.querySelector('.setup-header h1');
+    if(h1&&!h1.querySelector('.premium-badge')){
+      const badge=document.createElement('span');
+      badge.className='premium-badge';
+      badge.textContent='Premium';
+      h1.appendChild(badge);
+    }
+    await loadPlannerData();
+  }catch(e){ console.error('initPremium:',e); }
+}
+
+async function loadPlannerData(){
+  if(!_premiumUser) return;
+  try{
+    const{data}=await sb.from('planner_data').select('*').eq('email',_premiumUser.email).maybeSingle();
+    if(!data||!data.st_data) return;
+    if(data.clear_at){
+      const expiry=new Date(data.clear_at);
+      expiry.setDate(expiry.getDate()+45);
+      if(new Date()>expiry) return;
+      if(Object.keys(data.st_data).length===0) return;
+    }
+    Object.assign(ST,data.st_data);
+    if(Array.isArray(data.custom_minor)) customMinor.splice(0,customMinor.length,...data.custom_minor);
+    if(Array.isArray(data.custom_free))  customFree.splice(0,customFree.length,...data.custom_free);
+    if(data.prog&&data.prog!==prog){
+      prog=data.prog;
+      document.getElementById('pt-regular')?.classList.toggle('active',prog==='regular');
+      document.getElementById('pt-intl')?.classList.toggle('active',prog==='intl');
+    }
+    if(data.year_sem){
+      const sel=document.getElementById('sel-ys');
+      if(sel) setTimeout(()=>{ sel.value=data.year_sem; },100);
+    }
+    buildForm();
+    showPlannerToast('โหลดข้อมูลที่บันทึกไว้แล้ว ✅');
+  }catch(e){ console.error('loadPlannerData:',e); }
+}
+
+async function savePlannerData(auto=false){
+  if(!_isPremium||!_premiumUser) return;
+  try{
+    const yearSel=document.getElementById('sel-ys');
+    await sb.from('planner_data').upsert({
+      email:_premiumUser.email,
+      prog:prog,
+      year_sem:yearSel?.value||'',
+      st_data:{...ST},
+      custom_minor:[...customMinor],
+      custom_free:[...customFree],
+      updated_at:new Date().toISOString(),
+      clear_at:null
+    },{onConflict:'email'});
+    if(auto){
+      const ind=document.getElementById('autosave-ind');
+      if(ind){ ind.style.opacity='1'; setTimeout(()=>ind.style.opacity='0',1800); }
+    } else {
+      showPlannerToast('บันทึกข้อมูลแล้ว ✅');
+    }
+  }catch(e){
+    console.error('savePlannerData:',e);
+    if(!auto) alert('บันทึกไม่สำเร็จ: '+e.message);
+  }
+}
+
+async function clearPlannerData(){
+  if(!confirm('ล้างข้อมูลทั้งหมดใช่ไหม?\n\nข้อมูลในหน้าแพลนเนอร์จะหายทันที\nข้อมูล backup ในระบบจะถูกลบออกภายใน 45 วัน')) return;
+  Object.keys(ST).forEach(k=>delete ST[k]);
+  customMinor.splice(0);
+  customFree.splice(0);
+  buildForm();
+  localStorage.removeItem('hub_current_courses');
+  if(_premiumUser){
+    try{
+      await sb.from('planner_data').upsert({
+        email:_premiumUser.email,
+        st_data:{},custom_minor:[],custom_free:[],
+        clear_at:new Date().toISOString(),
+        updated_at:new Date().toISOString()
+      },{onConflict:'email'});
+    }catch(e){ console.error('clearPlannerData:',e); }
+  }
+  showPlannerToast('ล้างข้อมูลแล้ว ข้อมูล backup จะถูกลบภายใน 45 วัน');
+}
+
+function scheduleAutoSave(){
+  if(!_isPremium) return;
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer=setTimeout(()=>savePlannerData(true),2500);
+}
+
+function showPlannerToast(msg){
+  const t=document.getElementById('planner-toast');
+  if(!t) return;
+  t.textContent=msg;
+  t.style.opacity='1';
+  clearTimeout(t._tmr);
+  t._tmr=setTimeout(()=>t.style.opacity='0',2800);
+}
+
 // Init
 applyTranslations();
 buildForm();
+initPremium();
 </script>
 </body>
 </html>
