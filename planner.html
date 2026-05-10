@@ -1131,6 +1131,14 @@ async function initPremium(){
   try{
     const u=JSON.parse(localStorage.getItem('hub_user')||'null');
     const sub=localStorage.getItem('hub_sub');
+    // Track presence for ALL logged-in users (not just premium)
+    if(u){
+      const trackPresence=async()=>{
+        try{ await sb.from('user_presence').upsert({email:u.email,name:u.name,sub_status:sub||'none',last_seen:new Date().toISOString(),current_page:'📚 แพลนเนอร์'},{onConflict:'email'}); }catch(e){}
+      };
+      trackPresence();
+      setInterval(trackPresence,30000);
+    }
     if(!u||sub!=='active') return;
     _premiumUser=u;
     _isPremium=true;
