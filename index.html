@@ -455,10 +455,12 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
         <div class="a-nav active" id="nav-users" onclick="aNav('users')">👥 ผู้ใช้ทั้งหมด</div>
         <div class="a-nav" id="nav-slips" onclick="aNav('slips')">💳 สลิปรอตรวจ</div>
         <div class="a-nav hidden" id="nav-admins" onclick="aNav('admins')">🔑 จัดการ Admin</div>
+        <div class="a-nav hidden" id="nav-premium" onclick="aNav('premium')">⭐ Premium ฟรี</div>
       </div>
       <div class="admin-foot">
         <div class="role-lbl" id="role-lbl"></div>
-        <button class="btn-logout" onclick="adminLogout()">ออกจากระบบ</button>
+        <button class="btn-logout" onclick="goHero()">🌐 กลับสู่หน้าเว็บไซต์</button>
+        <button class="btn-logout" onclick="adminLogout()" style="margin-top:6px">ออกจากระบบ</button>
       </div>
     </div>
     <div class="admin-content">
@@ -496,6 +498,18 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
           <table class="atbl"><thead><tr>
             <th>อีเมล</th><th>ชื่อ</th><th>Role</th><th>การจัดการ</th>
           </tr></thead><tbody id="admins-body"></tbody></table>
+        </div>
+      </div>
+
+      <div class="a-section" id="sec-premium">
+        <div class="tbl-wrap">
+          <div class="tbl-head-bar">
+            <span>⭐ อีเมล Premium ฟรี</span>
+            <button class="bsm ad" onclick="openModal('m-add-premium')">+ เพิ่มอีเมล</button>
+          </div>
+          <table class="atbl"><thead><tr>
+            <th>อีเมล</th><th>หมายเหตุ</th><th>การจัดการ</th>
+          </tr></thead><tbody id="premium-body"></tbody></table>
         </div>
       </div>
 
@@ -611,6 +625,18 @@ body{font-family:'Sarabun',sans-serif;color:#2d3748;min-height:100vh;overflow-x:
       <button class="btn-pri" style="flex:1" onclick="saveEditSlip()">บันทึก</button>
       <button class="btn-can" onclick="closeModal('m-edit-slip')">ยกเลิก</button>
     </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="m-add-premium">
+  <div class="modal">
+    <div class="m-icon">⭐</div>
+    <h2>เพิ่มอีเมล Premium ฟรี</h2>
+    <p>อีเมลนี้จะได้รับสิทธิ์ Premium ทันทีที่ login</p>
+    <div class="field"><label>อีเมล</label><input type="email" id="new-premium-email" placeholder="example@email.com"></div>
+    <div class="field"><label>หมายเหตุ</label><input type="text" id="new-premium-note" placeholder="เช่น ทีมงาน, นักศึกษาทุน"></div>
+    <button class="btn-pri" onclick="confirmAddPremium()">✅ เพิ่ม</button>
+    <button class="btn-can" onclick="closeModal('m-add-premium')">ยกเลิก</button>
   </div>
 </div>
 
@@ -825,14 +851,24 @@ let SLIPS=[
   {id:4,email:'mink.jtw@cmu.ac.th',  date:'2026-03-01',amount:19,note:'PromptPay',      status:'approved'},
   {id:5,email:'fern.nm@cmu.ac.th',   date:'2026-03-15',amount:19,note:'โอนจาก KBank',  status:'approved'},
 ];
+let PREMIUM_WHITELIST=(function(){
+  try{ return JSON.parse(localStorage.getItem('hub_premium_list')||'[]'); }catch(e){ return []; }
+})();
+function savePremiumWhitelist(){ localStorage.setItem('hub_premium_list',JSON.stringify(PREMIUM_WHITELIST)); }
+function isPremiumWhitelisted(email){ return PREMIUM_WHITELIST.some(e=>e.email===email); }
+
 const SUPERADMIN={email:'kraten25ten@gmail.com', name:'Kraten (Owner)', role:'superadmin'};
-let ADMINS=[SUPERADMIN];
-const CREDS={'kraten25ten@gmail.com':'admin123'};
+let ADMINS=[
+  SUPERADMIN,
+  {email:'Patakarawin2547@gmail.com', name:'พี่แพท', role:'admin'},
+  {email:'nnn.nutnaree@gmail.com', name:'ลูกนัท', role:'admin'},
+];
+const CREDS={'kraten25ten@gmail.com':'admin123','Patakarawin2547@gmail.com':'admin123','nnn.nutnaree@gmail.com':'admin123'};
 // load extra admins from localStorage
 (function(){
   try{
     const saved=JSON.parse(localStorage.getItem('hub_admins')||'[]');
-    saved.forEach(a=>{ if(a.email!==SUPERADMIN.email){ ADMINS.push(a); CREDS[a.email]=a.pw||'admin123'; } });
+    saved.forEach(a=>{ if(!ADMINS.find(x=>x.email===a.email)){ ADMINS.push(a); CREDS[a.email]=a.pw||'admin123'; } });
   }catch(e){}
 })();
 function saveAdmins(){
@@ -850,6 +886,8 @@ function showScreen(id){
   el.scrollTop=0;
   const gs=el.querySelector('.grade-scroll');
   if(gs) gs.scrollTop=0;
+  if(id==='s-admin'||id==='s-admin-login') history.replaceState(null,'',location.pathname+'#admin');
+  else if(location.hash==='#admin') history.replaceState(null,'',location.pathname);
 }
 function goHero(){ showScreen('s-hero'); }
 
@@ -980,6 +1018,11 @@ function onGoogleLogin(res){
   const payload=JSON.parse(atob(res.credential.split('.')[1]));
   S.user={email:payload.email,name:payload.name||payload.email.split('@')[0],av:(payload.name||'U')[0].toUpperCase()};
   localStorage.setItem('hub_user',JSON.stringify(S.user));
+  if(isPremiumWhitelisted(payload.email)){
+    S.subStatus='active'; S.subExpiry=null;
+    localStorage.setItem('hub_sub','active');
+    localStorage.removeItem('hub_sub_expiry');
+  }
   renderTopUser(); checkExpiry();
   closeModal('m-login');
   if(S.pendingFeature){ const f=S.pendingFeature; S.pendingFeature=null; gotoFeature(f); }
@@ -1077,10 +1120,11 @@ function aNav(sec){
 function renderAdmin(){
   const active=USERS.filter(u=>u.sub==='active').length;
   const pend=SLIPS.filter(s=>s.status==='pending').length;
+  const rev=SLIPS.filter(s=>s.status==='approved').reduce((sum,s)=>sum+(s.amount||0),0);
   document.getElementById('st-total').textContent=USERS.length;
   document.getElementById('st-sub').textContent=active;
   document.getElementById('st-pend').textContent=pend;
-  document.getElementById('st-rev').textContent=active*19;
+  document.getElementById('st-rev').textContent=rev;
   document.getElementById('user-cnt').textContent=`ทั้งหมด ${USERS.length} คน`;
   const isSA=S.adminUser?.role==='superadmin';
   document.getElementById('users-body').innerHTML=USERS.map(u=>{
@@ -1109,11 +1153,40 @@ function renderAdmin(){
         <button class="bsm de" onclick="deleteSlip(${s.id})">ลบ</button>`:''}
     </td>
   </tr>`).join('');
-  if(isSA) document.getElementById('admins-body').innerHTML=ADMINS.map(a=>`<tr>
-    <td>${a.email}</td><td>${a.name}</td>
-    <td><span class="br ${a.role}">${a.role}</span></td>
-    <td>${a.role!=='superadmin'?`<button class="bsm de" onclick="removeAdmin('${a.email}')">ลบ</button>`:`<span style="color:#94a3b8;font-size:12px">—</span>`}</td>
-  </tr>`).join('');
+  if(isSA){
+    document.getElementById('nav-admins').classList.remove('hidden');
+    document.getElementById('nav-premium').classList.remove('hidden');
+    document.getElementById('admins-body').innerHTML=ADMINS.map(a=>`<tr>
+      <td>${a.email}</td><td>${a.name}</td>
+      <td><span class="br ${a.role}">${a.role}</span></td>
+      <td>${a.role!=='superadmin'?`<button class="bsm de" onclick="removeAdmin('${a.email}')">ลบ</button>`:`<span style="color:#94a3b8;font-size:12px">—</span>`}</td>
+    </tr>`).join('');
+    document.getElementById('premium-body').innerHTML=PREMIUM_WHITELIST.length
+      ? PREMIUM_WHITELIST.map(e=>`<tr>
+          <td>${e.email}</td><td>${e.note||'—'}</td>
+          <td><button class="bsm de" onclick="removePremiumWhitelist('${e.email}')">ลบ</button></td>
+        </tr>`).join('')
+      : `<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:16px">ยังไม่มีอีเมลในรายการ</td></tr>`;
+  }
+}
+
+function confirmAddPremium(){
+  const e=document.getElementById('new-premium-email').value.trim();
+  const note=document.getElementById('new-premium-note').value.trim();
+  if(!e){ alert('กรุณากรอกอีเมล'); return; }
+  if(PREMIUM_WHITELIST.find(x=>x.email===e)){ alert('อีเมลนี้มีอยู่แล้ว'); return; }
+  PREMIUM_WHITELIST.push({email:e, note});
+  savePremiumWhitelist();
+  closeModal('m-add-premium');
+  document.getElementById('new-premium-email').value='';
+  document.getElementById('new-premium-note').value='';
+  renderAdmin();
+}
+function removePremiumWhitelist(email){
+  if(!confirm('ยืนยันลบอีเมลนี้ออกจาก Premium ฟรี?')) return;
+  PREMIUM_WHITELIST=PREMIUM_WHITELIST.filter(e=>e.email!==email);
+  savePremiumWhitelist();
+  renderAdmin();
 }
 function viewUser(id){
   const u=USERS.find(x=>x.id===id); if(!u) return;
@@ -1133,7 +1206,7 @@ function viewUser(id){
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
             <span class="br ${sc}" style="font-size:11px">${st}</span>
             ${s.img_url?`<button class="bsm vi" onclick="viewSlipImg(${s.id})">ดูสลิป 🖼</button>`:''}
-            ${isSA&&s.status==='pending'?`<button class="bsm ok" onclick="approveSlip(${s.id});closeModal('m-detail');renderAdmin()">✅ อนุมัติ</button>
+            ${s.status==='pending'?`<button class="bsm ok" onclick="approveSlip(${s.id});closeModal('m-detail');renderAdmin()">✅ อนุมัติ</button>
               <button class="bsm no" onclick="rejectSlip(${s.id});closeModal('m-detail');renderAdmin()">❌ ปฏิเสธ</button>`:''}
           </div>
         </div>`;
@@ -1262,6 +1335,7 @@ document.querySelectorAll('.overlay').forEach(o=>{
 // ══════════════════════════
 renderTopUser();
 checkExpiry();
+if(window.location.hash==='#admin') goAdmin();
 (function(){
   const go = sessionStorage.getItem('hub_goto');
   if(!go) return;
