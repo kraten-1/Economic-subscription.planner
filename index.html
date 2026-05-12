@@ -419,7 +419,7 @@ input[type=number]{-moz-appearance:textfield}
         <div class="grade-inner">
           <div class="global-bar">
             <label>ตัด F ที่คะแนน</label>
-            <input type="number" id="global-f" value="50" min="0" max="90" oninput="onGlobalFChange()">
+            <input type="text" inputmode="numeric" id="global-f" value="50" oninput="onGlobalFChange()">
             <div class="global-hint" id="sem-label">กรอกวิชาจากแผนการเรียน หรือเพิ่มเองได้เลย</div>
             <div class="grade-legend" id="grade-legend"></div>
           </div>
@@ -621,7 +621,7 @@ input[type=number]{-moz-appearance:textfield}
     <input type="hidden" id="edit-slip-id">
     <div class="field"><label>อีเมลผู้ส่ง</label><input type="email" id="edit-slip-email"></div>
     <div class="field"><label>วันที่ส่ง</label><input type="date" id="edit-slip-date"></div>
-    <div class="field"><label>จำนวนเงิน (฿)</label><input type="number" id="edit-slip-amount" min="1"></div>
+    <div class="field"><label>จำนวนเงิน (฿)</label><input type="text" inputmode="numeric" id="edit-slip-amount"></div>
     <div class="field"><label>หมายเหตุ</label><input type="text" id="edit-slip-note"></div>
     <div class="field"><label>สถานะ</label>
       <select id="edit-slip-status" style="width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:14px;outline:none">
@@ -747,8 +747,8 @@ function renderTableRow(c,idx){
     const s=c.scores[key];
     return `<td class="td-score">
       <div style="display:flex;gap:3px;justify-content:center;align-items:center">
-        <input class="minp-t" type="number" min="1" value="${s.max}" placeholder="เต็ม" oninput="updateScore(${c.id},'${key}','max',this.value)" style="width:42px">
-        <input class="sinp-t" type="number" min="0" step="0.5" value="${s.got}" placeholder="—" oninput="updateScore(${c.id},'${key}','got',this.value)" style="width:42px">
+        <input class="minp-t" type="text" inputmode="decimal" value="${s.max}" placeholder="เต็ม" oninput="updateScore(${c.id},'${key}','max',this.value)" style="width:42px">
+        <input class="sinp-t" type="text" inputmode="decimal" value="${s.got}" placeholder="—" oninput="updateScore(${c.id},'${key}','got',this.value)" style="width:42px">
       </div>
     </td>`;
   }).join('');
@@ -756,9 +756,9 @@ function renderTableRow(c,idx){
     <td class="td-num">${idx+1}</td>
     <td><input class="cinp-code" type="text" placeholder="รหัสวิชา" maxlength="10" value="${c.code}" oninput="updateField(${c.id},'code',this.value)"></td>
     <td class="th-left"><input class="cinp-name" type="text" placeholder="ชื่อวิชา" value="${c.name}" oninput="updateField(${c.id},'name',this.value)"></td>
-    <td><input class="cinp-cr" type="number" min="1" max="6" value="${c.credits}" oninput="updateField(${c.id},'credits',this.value)"></td>
+    <td><input class="cinp-cr" type="text" inputmode="numeric" value="${c.credits}" oninput="updateField(${c.id},'credits',this.value)"></td>
     ${scoreCells}
-    <td><input class="finp-t" type="number" min="0" max="90" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)"></td>
+    <td><input class="finp-t" type="text" inputmode="numeric" value="${c.fCut}" oninput="updateField(${c.id},'fCut',this.value)"></td>
     <td class="td-total">${total!==null?total:'—'}</td>
     <td><span class="grade-badge ${cls}">${gr?gr.grade:'—'}</span></td>
     <td><button class="btn-del" onclick="removeCourse(${c.id})">×</button></td>

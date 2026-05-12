@@ -749,7 +749,7 @@ function customSection(type, label) {
       <div class="custom-add">
         <input type="text" id="${type}-code" placeholder="${t.customCode}" maxlength="10">
         <input type="text" id="${type}-name" placeholder="${t.customName}" style="flex:2">
-        <input type="number" id="${type}-cr" placeholder="${t.customCr}" style="width:48px" value="3" min="1" max="9">
+        <input type="text" inputmode="numeric" id="${type}-cr" placeholder="${t.customCr}" style="width:48px" value="3">
         <button class="btn-add" onclick="addCustom('${type}')">${t.btnAdd}</button>
       </div>
       <div class="custom-list" id="list-${type}">
